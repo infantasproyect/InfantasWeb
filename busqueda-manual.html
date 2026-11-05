@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Busqueda Manual | ¿Y si lo piensas?</title>
+
+<link rel="icon" href="./images/logo2.png" type="image/x-icon">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #17643b;
+    --dark: #10452a;
+    --light: #eaf5ed;
+    --yellow: #f4c542;
+    --background: #f5f7f5;
+    --text: #26372c;
+    --muted: #829087;
+    --border: #e8eee9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* =========================
+   ANIMACIONES DE ENTRADA (MODERNAS Y ESTABLES)
+========================= */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Respeto por preferencias de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .student {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* =========================
+   BARRA SUPERIOR
+========================= */
+
+.navbar {
+    background: white;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 18px rgba(0,0,0,.045);
+}
+
+.nav-brand img {
+    width: 190px;
+    max-height: 55px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 27px;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #526157;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .25s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary);
+}
+
+.nav-links a.active {
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: var(--yellow);
+    bottom: -10px;
+    left: 0;
+    border-radius: 5px;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 27px;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.hero {
+    background: linear-gradient(120deg, #12482e, #207348);
+    min-height: 275px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 430px;
+    height: 430px;
+    border: 75px solid rgba(255,255,255,.045);
+    border-radius: 50%;
+    right: -90px;
+    top: -180px;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    border: 45px solid rgba(255,255,255,.035);
+    border-radius: 50%;
+    right: 240px;
+    bottom: -180px;
+}
+
+.hero-content {
+    width: 86%;
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+    z-index: 2;
+    padding: 45px 0;
+}
+
+.hero-label {
+    display: inline-block;
+    background: rgba(255,255,255,.12);
+    color: #e2f4e7;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    color: white;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero h1 span {
+    color: var(--yellow);
+}
+
+.hero p {
+    color: #d0e6d6;
+    font-size: 13px;
+    max-width: 570px;
+    line-height: 1.8;
+}
+
+/* =========================
+   CONTENIDO
+========================= */
+
+.container {
+    width: 86%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.main-content {
+    padding: 45px 0 70px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    font-size: 21px;
+    margin-bottom: 6px;
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* =========================
+   ESTADISTICAS
+========================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 19px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 11px;
+    background: var(--light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    background: #fff6df;
+    color: #bd901d;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    background: #edf1ff;
+    color: #5069b4;
+}
+
+.stat-info span {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.stat-info strong {
+    font-size: 20px;
+}
+
+/* =========================
+   GRADOS
+========================= */
+
+.grade-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.grade-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+    font-family: inherit;
+    text-align: left;
+}
+
+.grade-card:hover,
+.grade-card.selected {
+    border-color: var(--primary);
+    background: #f3faf4;
+    transform: translateY(-2px);
+}
+
+.grade-card.selected {
+    box-shadow: 0 0 0 2px rgba(23,100,59,.08);
+}
+
+.grade-info strong {
+    display: block;
+    font-size: 17px;
+    color: var(--dark);
+}
+
+.grade-info span {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.grade-arrow {
+    background: var(--light);
+    color: var(--primary);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grade-status {
+    display: block;
+    font-size: 9px;
+    margin-top: 6px;
+    color: var(--muted);
+}
+
+.grade-status.loaded {
+    color: #278348;
+}
+
+.grade-status.error {
+    color: #c54b4b;
+}
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.search-panel {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.025);
+}
+
+label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #526b58;
+    margin-bottom: 9px;
+}
+
+select,
+input {
+    width: 100%;
+    border: 1px solid #dfe8e1;
+    background: #fafcfb;
+    border-radius: 9px;
+    padding: 15px;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+select:focus,
+input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(23,100,59,.08);
+}
+
+.search-hint {
+    font-size: 10px;
+    color: #9aa59d;
+    margin-top: -10px;
+}
+
+/* =========================
+   ESTADO DE CARGA
+========================= */
+
+.loading-status {
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: #f2f7f3;
+    border-radius: 8px;
+    font-size: 11px;
+    color: #52705b;
+    line-height: 1.7;
+}
+
+.loading-status.error {
+    background: #fff0f0;
+    color: #a43b3b;
+}
+
+/* =========================
+   RESULTADOS
+========================= */
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 25px 0 15px;
+    gap: 10px;
+}
+
+.results-header h3 {
+    font-size: 16px;
+}
+
+.counter {
+    background: var(--light);
+    color: var(--primary);
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.student {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: border-color .2s, background .2s;
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.student:hover {
+    border-color: #a7cbb1;
+    background: #fbfefb;
+}
+
+.student-info {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.student-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    background: var(--light);
+    color: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.student-name {
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.student-grade {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.open-link {
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.open-link:hover {
+    background: var(--dark);
+}
+
+.empty {
+    padding: 40px 15px;
+    text-align: center;
+    color: var(--muted);
+    background: #fafcfb;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+footer {
+    background: #123d29;
+    color: #d4e5d9;
+    padding: 25px 7%;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--yellow);
+    font-weight: 600;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px) {
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 10px;
+    }
+
+    .nav-brand img {
+        width: 145px;
+    }
+
+    .container {
+        width: 92%;
+    }
+}
+
+@media(max-width:760px) {
+    .navbar {
+        height: 72px;
+        padding: 0 5%;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 72px;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 10px 5% 20px;
+        box-shadow: 0 10px 15px rgba(0,0,0,.06);
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 13px 0;
+        font-size: 12px;
+    }
+
+    .nav-links a.active::after {
+        display: none;
+    }
+
+    .grade-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .search-panel {
+        padding: 20px;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media(max-width:430px) {
+    .grade-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student {
+        padding: 12px;
+    }
+
+    .open-link {
+        padding: 9px;
+        font-size: 9px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- BARRA SUPERIOR -->
+
+<nav class="navbar animate-fade-in" style="animation-delay: 0.05s;">
+
+    <a href="./home.html" class="nav-brand">
+        <img src="./images/logo1.png" alt="Logo">
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+        ☰
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="./home.html">Inicio</a></li>
+        <li><a href="./temas.html">Publicaciones-Grados</a></li>
+        <li><a href="./busqueda-manual.html" class="active">Busqueda manual</a></li>
+        <li><a href="./actualizaciones.html">Actualizaciones</a></li>
+        <li><a href="./desarrollo.html">Desarrollo Web</a></li>
+        <li><a href="./index.html">Log Out</a></li>
+    </ul>
+
+</nav>
+
+
+<!-- ENCABEZADO -->
+
+<section class="hero animate-fade-in" style="animation-delay: 0.15s;">
+
+    <div class="hero-content">
+
+        <div class="hero-label">
+            DIRECTORIO ACADEMICO
+        </div>
+
+        <h1>Busqueda <span>manual</span></h1>
+
+        <p>
+            Encuentra facilmente las publicaciones de los estudiantes.
+            Selecciona un grado o busca directamente por nombre
+            y accede a cada enlace disponible.
+        </p>
+
+    </div>
+
+</section>
+
+
+<main class="container main-content">
+
+    <!-- ESTADISTICAS -->
+
+    <section class="stats">
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.25s;">
+            <div class="stat-icon">♙</div>
+            <div class="stat-info">
+                <span>Estudiantes registrados</span>
+                <strong id="totalStudents">0</strong>
+            </div>
+        </div>
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.3s;">
+            <div class="stat-icon">▦</div>
+            <div class="stat-info">
+                <span>Grados disponibles</span>
+                <strong>6</strong>
+            </div>
+        </div>
+
+        <div class="stat-card animate-fade-in" style="animation-delay: 0.35s;">
+            <div class="stat-icon">✓</div>
+            <div class="stat-info">
+                <span>Archivos cargados</span>
+                <strong id="loadedFiles">0/6</strong>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- SELECCION DE GRADOS -->
+
+    <section>
+
+        <div class="section-title animate-fade-in" style="animation-delay: 0.4s;">
+            <h2>Selecciona un grado</h2>
+            <p>Elige uno de los seis grupos para consultar sus estudiantes.</p>
+        </div>
+
+        <div class="grade-grid">
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.45s;" data-grade="10a">
+                <div class="grade-info">
+                    <strong>10° A</strong>
+                    <span>Decimo A</span>
+                    <small class="grade-status" id="status-10a">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.5s;" data-grade="10b">
+                <div class="grade-info">
+                    <strong>10° B</strong>
+                    <span>Decimo B</span>
+                    <small class="grade-status" id="status-10b">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.55s;" data-grade="10c">
+                <div class="grade-info">
+                    <strong>10° C</strong>
+                    <span>Decimo C</span>
+                    <small class="grade-status" id="status-10c">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.6s;" data-grade="11a">
+                <div class="grade-info">
+                    <strong>11° A</strong>
+                    <span>Once A</span>
+                    <small class="grade-status" id="status-11a">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.65s;" data-grade="11b">
+                <div class="grade-info">
+                    <strong>11° B</strong>
+                    <span>Once B</span>
+                    <small class="grade-status" id="status-11b">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+            <button class="grade-card animate-fade-in" style="animation-delay: 0.7s;" data-grade="11c">
+                <div class="grade-info">
+                    <strong>11° C</strong>
+                    <span>Once C</span>
+                    <small class="grade-status" id="status-11c">Esperando...</small>
+                </div>
+                <div class="grade-arrow">→</div>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- BUSCADOR -->
+
+    <section class="search-panel animate-fade-in" style="animation-delay: 0.75s;">
+
+        <div class="section-title">
+            <h2>Buscar estudiante</h2>
+            <p>Busca por nombre, apellido o selecciona un grado académico.</p>
+        </div>
+
+        <label for="gradeSelect">GRADO ACADEMICO</label>
+
+        <select id="gradeSelect">
+            <option value="">Todos los grados</option>
+            <option value="10a">10 A - Decimo A</option>
+            <option value="10b">10 B - Decimo B</option>
+            <option value="10c">10 C - Decimo C</option>
+            <option value="11a">11 A - Once A</option>
+            <option value="11b">11 B - Once B</option>
+            <option value="11c">11 C - Once C</option>
+        </select>
+
+        <label for="searchInput">NOMBRE DEL ESTUDIANTE O GRADO</label>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Ej: Juan Perez, Maria Lopez, 10A..."
+            autocomplete="off"
+        >
+
+        <p class="search-hint">
+            Escribe un nombre para buscar o escribe 10A, Decimo A, 11B, Once B, etc.
+        </p>
+
+        <div class="loading-status" id="loadingStatus">
+            Preparando carga de los archivos...
+        </div>
+
+        <div class="results-header">
+            <h3>Resultados encontrados</h3>
+            <span class="counter" id="counter">0 estudiantes</span>
+        </div>
+
+        <div class="student-list" id="results">
+            <div class="empty">Cargando directorio de estudiantes...</div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <div>Sistema de consulta academica</div>
+    <div><span>Infantas Web</span></div>
+</footer>
+
+
+<script>
+
+/* =========================
+   MENU RESPONSIVE
+========================= */
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("show");
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("show");
+    });
+});
+
+
+/* =========================
+   CONFIGURACION DE GRADOS
+========================= */
+
+const grades = {
+
+    "10a": {
+        file: "10a.html",
+        name: "10° A - Decimo A"
+    },
+
+    "10b": {
+        file: "10b.html",
+        name: "10° B - Decimo B"
+    },
+
+    "10c": {
+        file: "10c.html",
+        name: "10° C - Decimo C"
+    },
+
+    "11a": {
+        file: "11a.html",
+        name: "11° A - Once A"
+    },
+
+    "11b": {
+        file: "11b.html",
+        name: "11° B - Once B"
+    },
+
+    "11c": {
+        file: "11c.html",
+        name: "11° C - Once C"
+    }
+
+};
+
+
+/* =========================
+   ELEMENTOS
+========================= */
+
+const gradeSelect = document.getElementById("gradeSelect");
+const searchInput = document.getElementById("searchInput");
+const results = document.getElementById("results");
+const counter = document.getElementById("counter");
+const totalStudents = document.getElementById("totalStudents");
+const loadedFiles = document.getElementById("loadedFiles");
+const loadingStatus = document.getElementById("loadingStatus");
+
+let students = [];
+let loadedCount = 0;
+let failedFiles = [];
+
+
+/* =========================
+   NORMALIZAR TEXTO
+========================= */
+
+function normalize(text) {
+
+    return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+
+}
+
+
+/* =========================
+   DETECTAR GRADO
+========================= */
+
+function detectGrade(text) {
+
+    const value = normalize(text)
+        .replace(/[^a-z0-9]/g, "");
+
+    const aliases = {
+
+        "10a": "10a",
+        "decimoa": "10a",
+        "decimo10a": "10a",
+
+        "10b": "10b",
+        "decimob": "10b",
+
+        "10c": "10c",
+        "decimoc": "10c",
+
+        "11a": "11a",
+        "oncea": "11a",
+        "decimoprimeroa": "11a",
+
+        "11b": "11b",
+        "onceb": "11b",
+
+        "11c": "11c",
+        "oncec": "11c"
+
+    };
+
+    return aliases[value] || null;
+
+}
+
+
+/* =========================
+   OBTENER PROPIEDAD DE OBJETO
+   DESDE EL JAVASCRIPT DEL HTML
+========================= */
+
+function extractProperty(objectText, property) {
+
+    const expression = new RegExp(
+        "(?:^|[,\\s])" + property +
+        "\\s*:\\s*([\"'`])((?:\\\\.|(?!\\1)[\\s\\S])*)\\1",
+        "m"
+    );
+
+    const match = objectText.match(expression);
+
+    if (!match) return "";
+
+    return match[2]
+        .replace(/\\(["'`\\])/g, "$1")
+        .trim();
+
+}
+
+
+/* =========================
+   LEER ESTUDIANTES DEL HTML
+
+   SOPORTA:
+   1. <a class="student-link">
+   2. <div id="student-list">
+   3. const students = [...]
+========================= */
+
+function extractStudents(html, gradeKey, gradeName, file) {
+
+    const parsed = new DOMParser().parseFromString(
+        html,
+        "text/html"
+    );
+
+    const extracted = [];
+
+    // PRIMER FORMATO: ENLACES HTML
+
+    const anchors = parsed.querySelectorAll(
+        "a.student-link, #student-list a[href]"
+    );
+
+    anchors.forEach(anchor => {
+
+        const name = anchor.textContent.trim();
+        const href = anchor.getAttribute("href");
+
+        if (!name || !href) return;
+
+        if (href.startsWith("javascript:")) return;
+
+        extracted.push({
+
+            name: name,
+            grade: gradeKey,
+            gradeName: gradeName,
+            url: resolveURL(href, file)
+
+        });
+
+    });
+
+
+    // SEGUNDO FORMATO: ARRAY JAVASCRIPT
+
+    const scripts = parsed.querySelectorAll("script");
+
+    scripts.forEach(script => {
+
+        const source = script.textContent;
+
+        const arrayRegex =
+            /(?:const|let|var)\s+students\s*=\s*\[([\s\S]*?)\]\s*;/g;
+
+        let arrayMatch;
+
+        while ((arrayMatch = arrayRegex.exec(source)) !== null) {
+
+            const arrayContent = arrayMatch[1];
+
+            const objectRegex = /\{([\s\S]*?)\}/g;
+
+            let objectMatch;
+
+            while ((objectMatch = objectRegex.exec(arrayContent)) !== null) {
+
+                const objectText = objectMatch[1];
+
+                const name = extractProperty(objectText, "name");
+                const href = extractProperty(objectText, "link");
+
+                if (!name || !href) continue;
+
+                if (href.startsWith("javascript:")) continue;
+
+                extracted.push({
+
+                    name: name,
+                    grade: gradeKey,
+                    gradeName: gradeName,
+                    url: resolveURL(href, file)
+
+                });
+
+            }
+
+        }
+
+    });
+
+
+    // ELIMINAR DUPLICADOS
+
+    const unique = new Map();
+
+    extracted.forEach(student => {
+
+        const key = normalize(student.name) + "|" + student.url;
+
+        if (!unique.has(key)) {
+            unique.set(key, student);
+        }
+
+    });
+
+    return Array.from(unique.values());
+
+}
+
+
+/* =========================
+   RESOLVER DIRECCIONES
+========================= */
+
+function resolveURL(href, file) {
+
+    try {
+
+        return new URL(
+            href,
+            new URL(file, window.location.href)
+        ).href;
+
+    } catch (error) {
+
+        console.error("URL invalida:", href);
+
+        return href;
+
+    }
+
+}
+
+
+/* =========================
+   CARGAR LOS SEIS ARCHIVOS
+========================= */
+
+async function loadStudents() {
+
+    students = [];
+    loadedCount = 0;
+    failedFiles = [];
+
+    results.innerHTML = `
+        <div class="empty">
+            Leyendo los archivos de los grados...
+        </div>
+    `;
+
+    loadingStatus.classList.remove("error");
+
+    const entries = Object.entries(grades);
+
+    const tasks = entries.map(async ([key, grade]) => {
+
+        const status = document.getElementById("status-" + key);
+
+        status.textContent = "Cargando...";
+        status.className = "grade-status";
+
+        try {
+
+            const response = await fetch(grade.file, {
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "HTTP " + response.status
+                );
+
+            }
+
+            const html = await response.text();
+
+            const list = extractStudents(
+                html,
+                key,
+                grade.name,
+                grade.file
+            );
+
+            loadedCount++;
+
+            status.textContent =
+                list.length + " estudiantes";
+
+            status.className = "grade-status loaded";
+
+            return list;
+
+        } catch (error) {
+
+            console.error(
+                "Error leyendo " + grade.file,
+                error
+            );
+
+            failedFiles.push(grade.file);
+
+            status.textContent = "Error de carga";
+
+            status.className = "grade-status error";
+
+            return [];
+
+        }
+
+    });
+
+
+    const loadedLists = await Promise.all(tasks);
+
+    students = loadedLists.flat();
+
+    // ACTUALIZAR ESTADISTICAS
+
+    totalStudents.textContent = students.length;
+    loadedFiles.textContent = loadedCount + "/6";
+
+    // INFORMACION DEL SISTEMA
+
+    if (failedFiles.length === 0) {
+
+        loadingStatus.textContent =
+            "✓ Los 6 archivos se cargaron correctamente. " +
+            students.length + " estudiantes encontrados.";
+
+        loadingStatus.classList.remove("error");
+
+    } else {
+
+        loadingStatus.textContent =
+            "Se cargaron " + loadedCount + " de 6 archivos. " +
+            "No se pudieron leer: " + failedFiles.join(", ") +
+            ". Revisa los nombres y la ubicacion de los HTML.";
+
+        loadingStatus.classList.add("error");
+
+    }
+
+    filterStudents();
+
+}
+
+
+/* =========================
+   ACTUALIZAR TARJETAS
+========================= */
+
+function updateGradeCards(selected) {
+
+    document.querySelectorAll(".grade-card").forEach(card => {
+
+        card.classList.toggle(
+            "selected",
+            card.dataset.grade === selected
+        );
+
+    });
+
+}
+
+
+/* =========================
+   FILTRAR ESTUDIANTES
+========================= */
+
+function filterStudents() {
+
+    const query = normalize(searchInput.value);
+
+    let selectedGrade = gradeSelect.value;
+
+    const detected = detectGrade(searchInput.value);
+
+    // DETECTAR GRADO ESCRITO
+
+    if (detected) {
+
+        selectedGrade = detected;
+        gradeSelect.value = detected;
+
+    }
+
+    updateGradeCards(selectedGrade);
+
+    const filtered = students.filter(student => {
+
+        const matchesGrade =
+            !selectedGrade ||
+            student.grade === selectedGrade;
+
+        const matchesName =
+            !query ||
+            normalize(student.name).includes(query);
+
+        return matchesGrade && matchesName;
+
+    });
+
+    renderResults(filtered);
+
+}
+
+
+/* =========================
+   INICIALES DEL ESTUDIANTE
+========================= */
+
+function getInitials(name) {
+
+    return name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(word => word.charAt(0))
+        .join("")
+        .toUpperCase();
+
+}
+
+
+/* =========================
+   MOSTRAR RESULTADOS
+========================= */
+
+function renderResults(list) {
+
+    results.innerHTML = "";
+
+    counter.textContent =
+        list.length +
+        (list.length === 1 ? " estudiante" : " estudiantes");
+
+    if (list.length === 0) {
+
+        const message = students.length === 0
+            ? "No se pudieron obtener estudiantes. Revisa el estado de carga de los archivos."
+            : "No encontramos estudiantes con esos datos. Prueba otro nombre o grado.";
+
+        results.innerHTML = `
+            <div class="empty">
+                ${message}
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.forEach((student, index) => {
+
+        const item = document.createElement("div");
+        item.className = "student";
+        
+        // Animación progresiva suave para cada ítem de resultado (limitada a 10 para rendimiento)
+        if (index < 10) {
+            item.style.animationDelay = `${index * 0.04}s`;
+        }
+
+        const info = document.createElement("div");
+        info.className = "student-info";
+
+        const avatar = document.createElement("div");
+        avatar.className = "student-avatar";
+        avatar.textContent = getInitials(student.name);
+
+        const details = document.createElement("div");
+
+        const name = document.createElement("div");
+        name.className = "student-name";
+        name.textContent = student.name;
+
+        const grade = document.createElement("div");
+        grade.className = "student-grade";
+        grade.textContent = student.gradeName;
+
+        details.appendChild(name);
+        details.appendChild(grade);
+
+        info.appendChild(avatar);
+        info.appendChild(details);
+
+        const link = document.createElement("a");
+        link.className = "open-link";
+        link.href = student.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Abrir enlace";
+
+        item.appendChild(info);
+        item.appendChild(link);
+
+        results.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================
+   SELECCIONAR GRADO
+========================= */
+
+document.querySelectorAll(".grade-card").forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        gradeSelect.value = card.dataset.grade;
+
+        searchInput.value = "";
+
+        filterStudents();
+
+        document.querySelector(".search-panel").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    });
+
+});
+
+
+/* =========================
+   EVENTOS
+========================= */
+
+searchInput.addEventListener("input", filterStudents);
+
+gradeSelect.addEventListener("change", filterStudents);
+
+
+/* =========================
+   INICIAR
+========================= */
+
+loadStudents();
+
+</script>
+
+</body>
+</html>

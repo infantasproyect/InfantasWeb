@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Actualizaciones | ¿Y si lo piensas?</title>
+  <link rel="icon" href="images/logo2.png" type="image/x-icon">
+
+  <style>
+    /* Creado por JuamCOL */
+
+    :root {
+      --fondo: #f7faf7;
+      --blanco: #ffffff;
+      --verde: #3b8f50;
+      --verde-claro: #e8f4e9;
+      --verde-oscuro: #174b2a;
+      --verde-profundo: #10351e;
+      --amarillo: #f5cf45;
+      --amarillo-claro: #fff8d9;
+      --texto: #1e3023;
+      --texto-secundario: #68796c;
+      --borde: #dce8dd;
+      --sombra: 0 10px 30px rgba(24, 73, 39, 0.08);
+      --radio: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(214, 239, 216, 0.55), transparent 30%),
+        var(--fondo);
+      color: var(--texto);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    /* =========================
+       ANIMACIONES DE ENTRADA MODERNAS
+    ========================= */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
+
+    /* Respeto por preferencias de reducción de movimiento */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-in {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* Navegacion */
+
+    .site-navbar {
+      position: sticky;
+      top: 12px;
+      z-index: 1000;
+      width: min(1200px, calc(100% - 32px));
+      margin: 12px auto 0;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      box-shadow: var(--sombra);
+    }
+
+    .navbar-inner {
+      min-height: 76px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .navbar-brand {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .navbar-brand img {
+      display: block;
+      width: 178px;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      list-style: none;
+    }
+
+    .navbar-menu a {
+      display: block;
+      padding: 11px 13px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      color: #526557;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .navbar-menu a:hover {
+      color: var(--verde-oscuro);
+      background: var(--verde-claro);
+    }
+
+    .navbar-menu a.active {
+      color: var(--verde-oscuro);
+      background: var(--verde-claro);
+      border-color: #c9e2cc;
+    }
+
+    .navbar-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      background: var(--blanco);
+      cursor: pointer;
+    }
+
+    .navbar-toggle span {
+      width: 19px;
+      height: 2px;
+      border-radius: 5px;
+      background: var(--verde-oscuro);
+      transition: 0.2s ease;
+    }
+
+    /* Contenido principal */
+
+    .contenedor {
+      width: min(1050px, calc(100% - 32px));
+      margin: auto;
+      padding: 58px 0 45px;
+    }
+
+    .encabezado {
+      max-width: 760px;
+      margin: 0 auto 42px;
+      text-align: center;
+    }
+
+    .etiqueta {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 15px;
+      margin-bottom: 22px;
+      color: var(--verde-oscuro);
+      background: var(--verde-claro);
+      border: 1px solid #cce3ce;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .punto {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--verde);
+      box-shadow: 0 0 0 4px rgba(59, 143, 80, 0.12);
+    }
+
+    .encabezado h1 {
+      color: var(--verde-oscuro);
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -2.5px;
+      font-weight: 850;
+    }
+
+    .encabezado h1 span {
+      color: var(--verde);
+    }
+
+    .encabezado p {
+      max-width: 620px;
+      margin: 20px auto 0;
+      color: var(--texto-secundario);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* Tarjetas */
+
+    .actualizaciones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .tarjeta {
+      position: relative;
+      overflow: hidden;
+      padding: 27px;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(24, 73, 39, 0.12);
+    }
+
+    .tarjeta.principal {
+      grid-column: 1 / -1;
+      border-color: #c9e2cc;
+    }
+
+    .tarjeta.principal::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--verde), var(--amarillo));
+    }
+
+    .cabecera-tarjeta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .sobre-titulo {
+      margin-bottom: 8px;
+      color: var(--verde);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .titulo-version {
+      color: var(--verde-oscuro);
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.2;
+      letter-spacing: -0.7px;
+    }
+
+    .insignia-version {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      color: var(--verde-oscuro);
+      background: var(--amarillo-claro);
+      border: 1px solid #f0df9a;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .descripcion {
+      margin-bottom: 25px;
+      color: var(--texto-secundario);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    /* Categorias de cambios */
+
+    .seccion-cambios + .seccion-cambios {
+      margin-top: 24px;
+    }
+
+    .titulo-cambios {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 13px;
+      color: var(--verde-oscuro);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .icono-cambio {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      color: var(--verde-oscuro);
+      background: var(--verde-claro);
+      border: 1px solid #cce3ce;
+      border-radius: 9px;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .seccion-cambios:nth-of-type(2) .icono-cambio {
+      color: #725b00;
+      background: var(--amarillo-claro);
+      border-color: #f0df9a;
+    }
+
+    .lista-cambios {
+      display: grid;
+      gap: 11px;
+      list-style: none;
+    }
+
+    .lista-cambios li {
+      position: relative;
+      padding-left: 20px;
+      color: #4d5f51;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .lista-cambios li::before {
+      content: "";
+      position: absolute;
+      top: 0.7em;
+      left: 2px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--verde);
+    }
+
+    /* Pie de tarjeta */
+
+    .pie-tarjeta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--borde);
+      color: #829084;
+      font-size: 0.78rem;
+    }
+
+    .estado {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--verde);
+      font-weight: 800;
+    }
+
+    .estado::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--verde);
+    }
+
+    /* Boton de inicio */
+
+    .acciones {
+      display: flex;
+      justify-content: center;
+      margin-top: 35px;
+    }
+
+    .boton-inicio {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 25px;
+      color: var(--blanco);
+      background: var(--verde-oscuro);
+      border: 1px solid var(--verde-oscuro);
+      border-radius: 13px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(23, 75, 42, 0.15);
+      transition: 0.2s ease;
+    }
+
+    .boton-inicio:hover {
+      color: var(--verde-profundo);
+      background: var(--amarillo);
+      border-color: var(--amarillo);
+      transform: translateY(-2px);
+    }
+
+    .pie-pagina {
+      margin-top: 30px;
+      color: #8a998d;
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    /* Adaptacion a moviles */
+
+    @media (max-width: 850px) {
+      .navbar-inner {
+        padding: 12px 16px;
+      }
+
+      .navbar-toggle {
+        display: flex;
+      }
+
+      .navbar-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        padding: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        background: var(--blanco);
+        border: 1px solid var(--borde);
+        border-radius: 16px;
+        box-shadow: var(--sombra);
+      }
+
+      .navbar-menu.open {
+        display: flex;
+      }
+
+      .navbar-menu a {
+        padding: 13px 14px;
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .contenedor {
+        width: calc(100% - 22px);
+        padding-top: 38px;
+      }
+
+      .actualizaciones {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .tarjeta.principal {
+        grid-column: auto;
+      }
+
+      .tarjeta {
+        padding: 21px;
+        border-radius: 17px;
+      }
+
+      .cabecera-tarjeta {
+        gap: 10px;
+      }
+
+      .encabezado h1 {
+        letter-spacing: -1.5px;
+      }
+
+      .insignia-version {
+        font-size: 0.7rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navegacion principal -->
+  <header class="site-navbar animate-fade-in" style="animation-delay: 0.05s;">
+    <nav class="navbar-inner" aria-label="Navegacion principal">
+
+      <a class="navbar-brand" href="./home.html" aria-label="Ir al inicio">
+        <img
+          src="images/logo1.png"
+          alt="¿Y si lo piensas?"
+          width="223"
+          height="50">
+      </a>
+
+      <button
+        class="navbar-toggle"
+        id="navbar-toggle"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="navbar-links">
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="navbar-menu" id="navbar-links">
+        <li>
+          <a href="./temas.html">Publicaciones - Grados</a>
+        </li>
+        <li>
+        </li>
+        <li>
+          <a href="./actualizaciones.html" class="active" aria-current="page">
+            Actualizaciones
+          </a>
+        </li>
+        <li>
+          <a href="./desarrollo.html">Desarrollo Web</a>
+        </li>
+        <li>
+          <a href="./index.html">Log Out</a>
+        </li>
+      </ul>
+
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- Encabezado -->
+    <header class="encabezado animate-fade-in" style="animation-delay: 0.15s;">
+      <div class="etiqueta">
+        <span class="punto"></span>
+        Registro de cambios
+      </div>
+
+      <h1>Actualiza<span>ciones</span></h1>
+
+      <p>
+        Descubre las novedades, mejoras y cambios de cada version.
+        Aqui encontraras todo lo que se ha implementado, arreglado
+        o quitado a lo largo del desarrollo.
+      </p>
+    </header>
+
+    <!-- Lista de actualizaciones -->
+    <section class="actualizaciones">
+
+      <!-- Actualizacion 1.1.0 -->
+      <article class="tarjeta principal animate-fade-in" style="animation-delay: 0.25s;">
+
+        <div class="cabecera-tarjeta">
+          <div>
+            <p class="sobre-titulo">Version mas reciente</p>
+            <h2 class="titulo-version">Actualizacion 1.1.0</h2>
+          </div>
+
+          <span class="insignia-version">v1.1.0</span>
+        </div>
+
+        <p class="descripcion">
+          En este espacio puedes observar las actualizaciones hechas
+          en el blog ¿Y si lo piensas?
+        </p>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">+</span>
+            Implementado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se mejoro la interfaz grafica del login y se agrego
+              mas interactividad.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">✓</span>
+            Arreglado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se mejoro la distribucion del contenido en diferentes
+              resoluciones, ventanas y dispositivos moviles.
+            </li>
+            <li>
+              Se corrigieron las redirecciones despues del cambio
+              de localhost a GitHub Pages.
+            </li>
+            <li>
+              Se optimizaron las animaciones.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">−</span>
+            Quitado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se retiro el login antiguo y se implemento uno mas moderno.
+            </li>
+            <li>
+              Se eliminaron elementos visuales innecesarios.
+            </li>
+          </ul>
+        </section>
+
+        <footer class="pie-tarjeta">
+          <span class="estado">Publicada</span>
+          <span>Fecha: 26/10/2026</span>
+        </footer>
+
+      </article>
+
+      <!-- Actualizacion 1.0.0 -->
+      <article class="tarjeta animate-fade-in" style="animation-delay: 0.35s;">
+
+        <div class="cabecera-tarjeta">
+          <div>
+            <p class="sobre-titulo">Actualizacion anterior</p>
+            <h2 class="titulo-version">Actualizacion 1.0.0</h2>
+          </div>
+
+          <span class="insignia-version">v1.0.0</span>
+        </div>
+
+        <p class="descripcion">
+          En esta version se implemento una nueva interfaz grafica
+          para el login del blog ¿Y si lo piensas?
+        </p>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">+</span>
+            Implementado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se implemento una nueva interfaz grafica del login,
+              mas moderna e interactiva.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">✓</span>
+            Arreglado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se mejoro la distribucion del contenido en diferentes
+              resoluciones y dispositivos.
+            </li>
+            <li>
+              Se corrigieron errores visuales de la pagina.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">−</span>
+            Quitado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Se retiro el login antiguo.
+            </li>
+            <li>
+              Se eliminaron elementos visuales innecesarios.
+            </li>
+          </ul>
+        </section>
+
+        <footer class="pie-tarjeta">
+          <span class="estado">Publicada</span>
+          <span>Fecha: 25/10/2026</span>
+        </footer>
+
+      </article>
+
+      <!-- Plantilla para futuras actualizaciones -->
+      <article class="tarjeta animate-fade-in" style="animation-delay: 0.45s;">
+
+        <div class="cabecera-tarjeta">
+          <div>
+            <p class="sobre-titulo">Plantilla editable</p>
+            <h2 class="titulo-version">Actualizacion 0.9.0</h2>
+          </div>
+
+          <span class="insignia-version">v0.9.0</span>
+        </div>
+
+        <p class="descripcion">
+          Escribe aqui la descripcion de esta version.
+        </p>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">+</span>
+            Implementado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Mas rapidez en el tiempo de carga entre redirecciones
+              de paginas externas.
+            </li>
+            <li>
+              Simplificacion de codigo para mejorar la fluidez
+              en dispositivos moviles.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">✓</span>
+            Arreglado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Escribe aqui los errores que fueron corregidos.
+            </li>
+          </ul>
+        </section>
+
+        <section class="seccion-cambios">
+          <h3 class="titulo-cambios">
+            <span class="icono-cambio">−</span>
+            Quitado
+          </h3>
+
+          <ul class="lista-cambios">
+            <li>
+              Escribe aqui los elementos que fueron retirados.
+            </li>
+          </ul>
+        </section>
+
+        <footer class="pie-tarjeta">
+          <span class="estado">Publicada</span>
+          <span>Fecha: 22/10/2026</span>
+        </footer>
+
+      </article>
+
+    </section>
+
+    <!-- Accion inferior -->
+    <div class="acciones animate-fade-in" style="animation-delay: 0.55s;">
+      <a href="./home.html" class="boton-inicio">
+        <span aria-hidden="true">←</span>
+        Volver al inicio
+      </a>
+    </div>
+
+    <footer class="pie-pagina animate-fade-in" style="animation-delay: 0.6s;">
+      Infantas Blog · Registro de actualizaciones
+    </footer>
+
+  </main>
+
+  <script>
+    // Creado por JuamCOL
+
+    const menuToggle = document.getElementById("navbar-toggle");
+    const menuLinks = document.getElementById("navbar-links");
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = menuLinks.classList.toggle("open");
+
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Cerrar menu" : "Abrir menu"
+      );
+    });
+
+    menuLinks.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        menuLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Abrir menu");
+      });
+    });
+
+    document.addEventListener("click", function (event) {
+      const clickedInsideMenu = menuLinks.contains(event.target);
+      const clickedToggle = menuToggle.contains(event.target);
+
+      if (!clickedInsideMenu && !clickedToggle) {
+        menuLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Abrir menu");
+      }
+    });
+  </script>
+
+</body>
+</html>

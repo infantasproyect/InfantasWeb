@@ -1,0 +1,1068 @@
+
+<!DOCTYPE html>
+<html class="wide wow-animation" lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no">
+
+<title>Undecimo C | Infantas Web</title>
+
+<link rel="icon" href="./images/logo2.png" type="image/x-icon">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+    --primary: #17643b;
+    --primary-dark: #10452a;
+    --primary-light: #eaf5ed;
+    --yellow: #f4c542;
+    --background: #f5f7f5;
+    --white: #ffffff;
+    --text: #26372c;
+    --muted: #829087;
+    --border: #e8eee9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* =========================
+   BARRA DE NAVEGACION
+========================= */
+
+.navbar {
+    background: #ffffff;
+    height: 82px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 18px rgba(0,0,0,0.045);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.nav-brand img {
+    width: 190px;
+    max-height: 55px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 27px;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #526157;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .25s;
+    position: relative;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary);
+}
+
+.nav-links a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--yellow);
+    border-radius: 5px;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 27px;
+    cursor: pointer;
+    color: var(--primary);
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.hero {
+    background: linear-gradient(120deg, #12482e, #207348);
+    min-height: 285px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border: 75px solid rgba(255,255,255,.045);
+    border-radius: 50%;
+    right: -90px;
+    top: -190px;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    border: 45px solid rgba(255,255,255,.035);
+    border-radius: 50%;
+    right: 250px;
+    bottom: -170px;
+}
+
+.hero-content {
+    width: 86%;
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+    z-index: 2;
+    padding: 45px 0;
+}
+
+.hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.12);
+    color: #e2f4e7;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    margin-bottom: 20px;
+}
+
+.hero-label span {
+    width: 7px;
+    height: 7px;
+    background: var(--yellow);
+    border-radius: 50%;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    color: white;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+
+.hero h1 span {
+    color: var(--yellow);
+}
+
+.hero p {
+    color: #d0e6d6;
+    font-size: 14px;
+    max-width: 560px;
+    line-height: 1.8;
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL
+========================= */
+
+.container {
+    width: 86%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.main-content {
+    padding: 45px 0 70px;
+}
+
+/* ESTADISTICAS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    background: #fff7df;
+    color: #b78a13;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    background: #eaf0ff;
+    color: #4567b7;
+}
+
+.stat-info span {
+    color: var(--muted);
+    font-size: 11px;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.stat-info strong {
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* BUSCADOR */
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.search-box {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 23px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.025);
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dfe8e1;
+    border-radius: 9px;
+    background: #fafcfb;
+    padding: 0 15px;
+    transition: .25s;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(23,100,59,.08);
+}
+
+.search-icon {
+    font-size: 19px;
+    color: var(--primary);
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 16px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.search-input-wrapper input::placeholder {
+    color: #a5b0a8;
+}
+
+.search-hint {
+    color: #9aa59d;
+    font-size: 10px;
+    margin-top: 12px;
+}
+
+/* LISTA DE ESTUDIANTES */
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 10px;
+}
+
+.list-header h3 {
+    font-size: 17px;
+}
+
+.total-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 7px 13px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.student-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: .25s;
+    min-width: 0;
+}
+
+.student-card:hover {
+    transform: translateY(-3px);
+    border-color: #a7cbb1;
+    box-shadow: 0 8px 22px rgba(24,75,43,.06);
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.student-avatar {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+    background: #eaf5ed;
+    color: var(--primary);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.student-details {
+    min-width: 0;
+}
+
+.student-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #314438;
+    overflow-wrap: anywhere;
+}
+
+.student-description {
+    font-size: 10px;
+    color: #98a39a;
+    margin-top: 4px;
+}
+
+.student-button {
+    background: var(--primary-light);
+    color: var(--primary);
+    text-decoration: none;
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: .2s;
+}
+
+.student-button:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* SIN RESULTADOS */
+
+.empty-state {
+    background: white;
+    border: 1px dashed #dce6de;
+    border-radius: 13px;
+    text-align: center;
+    padding: 55px 20px;
+    grid-column: 1 / -1;
+}
+
+.empty-icon {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.empty-state h3 {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+.empty-state p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* PIE DE PAGINA */
+
+footer {
+    background: #123d29;
+    color: #d4e5d9;
+    padding: 25px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--yellow);
+    font-weight: 600;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 1000px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 10px;
+    }
+
+    .nav-brand img {
+        width: 145px;
+    }
+
+    .container {
+        width: 92%;
+    }
+}
+
+@media(max-width: 760px) {
+
+    .navbar {
+        height: 72px;
+        padding: 0 5%;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 72px;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 10px 5% 20px;
+        box-shadow: 0 10px 15px rgba(0,0,0,.06);
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 13px 0;
+        font-size: 12px;
+    }
+
+    .nav-links a.active::after {
+        display: none;
+    }
+
+    .hero {
+        min-height: 260px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .student-grid {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media(max-width: 400px) {
+
+    .student-card {
+        padding: 12px;
+    }
+
+    .student-button {
+        padding: 9px;
+        font-size: 9px;
+    }
+
+    .student-avatar {
+        width: 37px;
+        min-width: 37px;
+        height: 37px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     BARRA SUPERIOR
+========================= -->
+
+<nav class="navbar">
+
+    <a href="./home.html" class="nav-brand">
+        <img src="./images/logo1.png" alt="Logo">
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+        ☰
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+
+        <li>
+            <a href="./home.html">Inicio</a>
+        </li>
+
+        <li>
+            <a href="./temas.html">Publicaciones-Grados</a>
+        </li>
+
+        <li>
+            <a href="./busqueda-manual.html">Busqueda manual</a>
+        </li>
+
+        <li>
+            <a href="./actualizaciones.html">Actualizaciones</a>
+        </li>
+
+        <li>
+            <a href="./desarrollo.html">Desarrollo Web</a>
+        </li>
+
+        <li>
+            <a href="./index.html">Log Out</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- =========================
+     ENCABEZADO DEL GRADO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-label">
+            <span></span>
+            DIRECTORIO ACADEMICO
+        </div>
+
+        <h1>
+            Grado <span>10° C</span>
+        </h1>
+
+        <p>
+            Explora el directorio de estudiantes de Undecimo C.
+            Encuentra sus publicaciones y accede fácilmente
+            a cada uno de sus espacios.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONTENIDO
+========================= -->
+
+<main class="container main-content">
+
+    <!-- ESTADISTICAS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">♙</div>
+
+            <div class="stat-info">
+                <span>Total de estudiantes</span>
+                <strong id="totalStudents">0</strong>
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">▦</div>
+
+            <div class="stat-info">
+                <span>Grado académico</span>
+                <strong>11° C</strong>
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">✓</div>
+
+            <div class="stat-info">
+                <span>Directorio</span>
+                <strong>Disponible</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BUSCADOR -->
+
+    <section>
+
+        <div class="section-title">
+
+            <h2>Directorio de estudiantes</h2>
+
+            <p>
+                Busca un estudiante por su nombre o apellido.
+            </p>
+
+        </div>
+
+        <div class="search-box">
+
+            <div class="search-input-wrapper">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    id="studentSearch"
+                    placeholder="Escribe el nombre del estudiante..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+            <p class="search-hint">
+                Puedes escribir nombres completos o solamente una parte.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESULTADOS -->
+
+    <section>
+
+        <div class="list-header">
+
+            <h3>Estudiantes de 11° C</h3>
+
+            <span class="total-badge" id="resultCount">
+                0 estudiantes
+            </span>
+
+        </div>
+
+        <div class="student-grid" id="studentGrid">
+
+            <!-- ESTUDIANTES GENERADOS AUTOMATICAMENTE -->
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     PIE DE PAGINA
+========================= -->
+
+<footer>
+
+    <div>
+        Directorio académico | Grado 11° C
+    </div>
+
+    <div>
+        <span>Infantas Web</span>
+    </div>
+
+</footer>
+
+
+<!-- =========================
+     DATOS Y FUNCIONES
+========================= -->
+
+<script>
+
+// MENU RESPONSIVE
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+
+    navLinks.classList.toggle("show");
+
+});
+
+
+// CERRAR MENU AL SELECCIONAR UNA OPCION
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("show");
+    });
+
+});
+
+
+// LISTA DE ESTUDIANTES
+// Agrega nuevos estudiantes copiando el formato.
+
+const students = [
+
+    {
+        name: "Angel Castro",
+        link: "https://ejemplo.com/angel"
+    },
+
+    {
+        name: "Asley Aceros",
+        link: "https://ejemplo.com/asley"
+    },
+
+    {
+        name: "Camilo Ariza",
+        link: "https://ejemplo.com/camilo-ariza"
+    },
+
+    {
+        name: "Camilo Suarez",
+        link: "https://ejemplo.com/camilo-suarez"
+    },
+
+    {
+        name: "Cesar Joya",
+        link: "https://ejemplo.com/cesar"
+    },
+
+    {
+        name: "Daira Florez",
+        link: "https://ejemplo.com/daira"
+    },
+
+    {
+        name: "Edinson Cristancho",
+        link: "https://ejemplo.com/edinson"
+    },
+
+    {
+        name: "Gabriela Salas",
+        link: "https://ejemplo.com/gabriela"
+    },
+
+    {
+        name: "Isabella Cano",
+        link: "https://ejemplo.com/isabella"
+    },
+
+    {
+        name: "Jhon Sosa",
+        link: "https://ejemplo.com/jhon"
+    },
+
+    {
+        name: "Jorge Sosa",
+        link: "https://ejemplo.com/jorge"
+    },
+
+    {
+        name: "Juan Rodriguez",
+        link: "https://ejemplo.com/juan-rodriguez"
+    },
+
+    {
+        name: "Juan Porras",
+        link: "https://ejemplo.com/juan-porras"
+    },
+
+    {
+        name: "Juan Arroyo",
+        link: "https://ejemplo.com/juan-arroyo"
+    },
+
+    {
+        name: "Juan Fuentes",
+        link: "https://ejemplo.com/juan-fuentes"
+    },
+
+    {
+        name: "Manuel Castellanos",
+        link: "https://ejemplo.com/manuel"
+    },
+
+
+    {
+        name: "Juana Marin",
+        link: "https://ejemplo.com/manuel"
+    },
+
+    {
+        name: "Maria Miranda",
+        link: "https://ejemplo.com/maria"
+    }
+
+];
+
+
+// ELEMENTOS HTML
+
+const studentGrid = document.getElementById("studentGrid");
+const studentSearch = document.getElementById("studentSearch");
+const totalStudents = document.getElementById("totalStudents");
+const resultCount = document.getElementById("resultCount");
+
+
+// NORMALIZAR TEXTO
+
+function normalizeText(text) {
+
+    return text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+
+}
+
+
+// OBTENER INICIALES
+
+function getInitials(name) {
+
+    return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+
+}
+
+
+// MOSTRAR ESTUDIANTES
+
+function renderStudents(list) {
+
+    studentGrid.innerHTML = "";
+
+    resultCount.textContent =
+        list.length +
+        (list.length === 1 ? " estudiante" : " estudiantes");
+
+    if (list.length === 0) {
+
+        studentGrid.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">⌕</div>
+
+                <h3>No encontramos resultados</h3>
+
+                <p>
+                    Intenta buscar con otro nombre o apellido.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.forEach(student => {
+
+        const card = document.createElement("div");
+        card.className = "student-card";
+
+        const info = document.createElement("div");
+        info.className = "student-info";
+
+        const avatar = document.createElement("div");
+        avatar.className = "student-avatar";
+        avatar.textContent = getInitials(student.name);
+
+        const details = document.createElement("div");
+        details.className = "student-details";
+
+        const name = document.createElement("div");
+        name.className = "student-name";
+        name.textContent = student.name;
+
+        const description = document.createElement("div");
+        description.className = "student-description";
+        description.textContent = "Estudiante · Grado 11° C";
+
+        details.appendChild(name);
+        details.appendChild(description);
+
+        info.appendChild(avatar);
+        info.appendChild(details);
+
+        const link = document.createElement("a");
+
+        link.className = "student-button student-link";
+        link.href = student.link;
+        link.textContent = "Ver publicación";
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+
+        card.appendChild(info);
+        card.appendChild(link);
+
+        studentGrid.appendChild(card);
+
+    });
+
+}
+
+
+// BUSQUEDA EN TIEMPO REAL
+
+studentSearch.addEventListener("input", () => {
+
+    const query = normalizeText(studentSearch.value);
+
+    const filtered = students.filter(student => {
+
+        return normalizeText(student.name).includes(query);
+
+    });
+
+    renderStudents(filtered);
+
+});
+
+
+// INICIALIZAR DIRECTORIO
+
+totalStudents.textContent = students.length;
+
+renderStudents(students);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infantas Web | LOGIN</title>
+<link rel="icon" href="images/logo2.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#f7faf0;--mist:#e8f3da;--leaf:#5aa469;--forest:#1f4d2e;--deep:#163823;--sun:#f2c230;--cream:#fff6cc;--line:#d5e4c6;--muted:#5c7262;--bad:#b3402f;--ok:#2f7d46;font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif}
+  *{box-sizing:border-box;margin:0}
+  html,body{min-height:100%}
+  body{background:var(--paper);color:var(--deep);overflow-x:hidden}
+  .shell{display:grid;grid-template-columns:1.05fr .95fr;min-height:100vh}
+
+  /* Panel institucional */
+  .brand{position:relative;overflow:hidden;color:#fff;padding:44px 56px;display:flex;flex-direction:column;justify-content:space-between;gap:28px;
+    background:radial-gradient(circle at 12% 8%,#2f7d46 0%,transparent 45%),radial-gradient(circle at 92% 92%,#2b6a3d 0%,transparent 50%),var(--deep)}
+  .brand::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.2px);background-size:26px 26px;animation:pan 30s linear infinite}
+  @keyframes pan{to{background-position:260px 260px}}
+  .rings{position:absolute;right:-160px;top:50%;width:560px;height:560px;margin-top:-280px;pointer-events:none}
+  .rings i{position:absolute;inset:0;border:1.5px solid rgba(242,194,48,.4);border-radius:50%;animation:ring 8s ease-out infinite}
+  .rings i:nth-child(2){animation-delay:2.7s}.rings i:nth-child(3){animation-delay:5.4s}
+  @keyframes ring{from{transform:scale(.2);opacity:.9}to{transform:scale(1);opacity:0}}
+  .b-top,.b-mid,.b-foot{position:relative;z-index:1}
+  .b-top{display:flex;align-items:center;gap:14px;animation:fadeup .8s both}
+  .emblem{width:54px;height:54px;object-fit:contain;background:#fff;border-radius:14px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.25);animation:bob 5s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-5px)}}
+  .b-top strong{display:block;font-family:"Fraunces",Georgia,serif;font-size:1.1rem;letter-spacing:.2px}
+  .b-top span{font-size:.82rem;color:var(--cream);opacity:.85}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);animation:fadeup .8s .15s both}
+  .eyebrow::before{content:"";width:28px;height:2px;background:var(--sun)}
+  .b-mid h2{font-family:"Fraunces",Georgia,serif;font-size:clamp(2rem,3.4vw,3.1rem);line-height:1.1;margin:14px 0 14px;max-width:560px;animation:fadeup .9s .25s both}
+  .b-mid h2 em{font-style:normal;background:linear-gradient(var(--sun),var(--sun)) 0 94%/0 .13em no-repeat;animation:under 1.2s 1.1s forwards}
+  @keyframes under{to{background-size:100% .13em}}
+  .lead{max-width:470px;color:#dcebd5;line-height:1.55;animation:fadeup .9s .4s both}
+  .quotes{position:relative;height:3.4em;margin-top:26px;max-width:460px}
+  .quotes p{position:absolute;inset:0;font-family:"Fraunces",Georgia,serif;font-size:1.12rem;font-style:italic;color:var(--cream);opacity:0;animation:q 15s infinite;padding-left:16px;border-left:3px solid var(--sun)}
+  .quotes p:nth-child(2){animation-delay:5s}.quotes p:nth-child(3){animation-delay:10s}
+  @keyframes q{0%{opacity:0;transform:translateY(12px)}5%,30%{opacity:1;transform:none}35%,100%{opacity:0;transform:translateY(-12px)}}
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+  .stat{min-width:112px;padding:14px 18px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(4px);animation:fadeup .8s both;transition:transform .3s,background .3s}
+  .stat:nth-child(1){animation-delay:.6s}.stat:nth-child(2){animation-delay:.75s}.stat:nth-child(3){animation-delay:.9s}
+  .stat:hover{transform:translateY(-5px);background:rgba(255,255,255,.14)}
+  .stat b{display:block;font-family:"Fraunces",Georgia,serif;font-size:1.9rem;color:var(--sun);line-height:1}
+  .stat span{font-size:.78rem;color:#dcebd5}
+  .b-foot{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:#bcd3b6}
+  .vine{position:absolute;left:0;bottom:0;width:100%;height:90px;z-index:0;pointer-events:none}
+  .vine path{fill:none;stroke:var(--sun);stroke-width:2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.55;animation:draw 5s 1s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fadeup{from{opacity:0;transform:translateY(22px)}}
+
+  /* Lado del acceso */
+  .side{position:relative;display:grid;place-items:center;padding:32px 20px;overflow:hidden;background:linear-gradient(160deg,var(--paper),#eef6e0 55%,var(--cream) 140%)}
+  #blobs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  #blobs span{position:absolute;border-radius:50%;animation:drift var(--d) ease-in-out var(--delay) infinite alternate}
+  @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(var(--x),var(--y)) scale(1.18)}}
+
+  .login{position:relative;z-index:1;width:min(100%,430px);background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 28px 70px rgba(31,77,46,.18);animation:enter .9s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes enter{from{transform:translateX(50px);opacity:0}}
+  .login.shake{animation:shake .45s}
+  @keyframes shake{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+  .top{background:linear-gradient(180deg,var(--mist),#f4f9ea);padding:20px 0 0;text-align:center}
+  .plant{width:140px;height:150px;display:block;margin:0 auto;overflow:visible}
+  .stem{stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .9s ease}
+  .leaf{transform:scale(0);transition:transform .7s cubic-bezier(.3,1.6,.5,1) .5s}
+  .leaf.l{transform-origin:80px 100px}.leaf.r{transform-origin:80px 88px}
+  .flower{transform:scale(0) rotate(-90deg);transform-origin:80px 55px;transition:transform 1s cubic-bezier(.3,1.5,.5,1)}
+  .seed{transition:opacity .5s;animation:pulse 1.8s ease-in-out infinite;transform-origin:80px 124px}
+  .plant.s1 .stem,.plant.s2 .stem{stroke-dashoffset:0}
+  .plant.s1 .leaf,.plant.s2 .leaf{transform:scale(1)}
+  .plant.s2 .flower{transform:scale(1) rotate(0)}
+  .plant.s1 .seed,.plant.s2 .seed{opacity:0;animation:none}
+  .plant.s2 .grow{animation:sway 3.4s ease-in-out infinite;transform-origin:80px 126px}
+  .sp{opacity:0;fill:var(--sun)}
+  .plant.s2 .sp{animation:rise 2.6s ease-out infinite}
+  .plant.s2 .sp:nth-of-type(2){animation-delay:.8s}.plant.s2 .sp:nth-of-type(3){animation-delay:1.6s}
+  @keyframes pulse{50%{transform:scale(1.35)}}
+  @keyframes sway{50%{transform:rotate(2.5deg)}}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}25%{opacity:.9}100%{transform:translateY(-34px);opacity:0}}
+  .bar{height:5px;background:var(--line);margin-top:6px}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--leaf),var(--sun));transition:width .7s cubic-bezier(.3,1,.4,1)}
+
+  .body{padding:22px 30px 22px}
+  .tag{display:block;text-align:center;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--leaf);margin-bottom:4px}
+  h1{font-family:"Fraunces",Georgia,serif;font-size:1.7rem;font-weight:700;color:var(--forest);text-align:center;line-height:1.15}
+  .sub{text-align:center;color:var(--muted);margin:6px 0 18px;font-size:.93rem}
+  .rise{animation:fadeup .7s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--i) * .09s + .45s)}
+  label{display:block;font-weight:700;font-size:.88rem;margin-bottom:6px;color:var(--forest)}
+  .field{margin-bottom:12px}
+  input{width:100%;font:inherit;font-size:1rem;color:var(--deep);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;transition:border-color .25s,box-shadow .25s,background .25s}
+  input::placeholder{color:#93a798}
+  input:focus{border-color:var(--leaf);background:#fff;box-shadow:0 0 0 4px rgba(90,164,105,.18)}
+  input.ok{border-color:var(--ok)}input.bad{border-color:var(--bad)}
+  .hint{min-height:1.3em;margin-top:5px;font-size:.82rem;color:var(--muted)}
+  .hint.ok{color:var(--ok)}.hint.bad{color:var(--bad)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .chip{font-size:.74rem;font-weight:700;padding:3px 11px;border-radius:999px;border:1.5px solid var(--c);color:var(--c);opacity:.6;transition:all .35s cubic-bezier(.3,1.6,.5,1)}
+  .chip.est{--c:#2f9e5b;--t:#fff}.chip.doc{--c:#2f6fd6;--t:#fff}.chip.vis{--c:#d6403f;--t:#fff}
+  .chip.on{background:var(--c);color:var(--t);opacity:1;transform:scale(1.1)}
+
+  /* Tipo de visitante (aparece solo con rol Visitante) */
+  .tipo-box{max-height:0;opacity:0;overflow:hidden;padding:0 4px;transform:translateY(-8px);transition:max-height .55s ease,opacity .4s,transform .4s,margin .4s}
+  .tipo-box.show{max-height:150px;opacity:1;transform:none;margin-bottom:12px}
+  .tipo-box .lbl{display:block;font-weight:700;font-size:.88rem;color:var(--forest)}
+  .tipos{display:flex;gap:8px;flex-wrap:wrap;margin-top:7px}
+  .opt{display:inline-block;margin:0;position:relative;cursor:pointer}
+  .tipos .opt input{position:absolute;opacity:0;width:1px;height:1px;padding:0;border:0;box-shadow:none}
+  .opt span{display:block;padding:9px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);font-weight:600;font-size:.88rem;color:var(--forest);transition:all .3s cubic-bezier(.3,1.6,.5,1)}
+  .opt:hover span{border-color:#d6403f;transform:translateY(-2px)}
+  .tipos .opt input:checked + span{background:#d6403f;border-color:#d6403f;color:#fff;transform:scale(1.05);box-shadow:0 6px 14px rgba(214,64,63,.3)}
+  .tipos .opt input:focus-visible + span{outline:3px solid var(--sun);outline-offset:2px}
+
+  /* Acceso admin (oculto) */
+  button.ready.adm,button.checking.adm,button.verified.adm{background:linear-gradient(90deg,#7b2ff7,#f107a3)}
+  button.ready.adm{box-shadow:0 10px 24px rgba(241,7,163,.35)}
+  button.checking.adm::before{background:#fff}
+  .plant.adm .flower g{fill:#f107a3}
+  .welcome.admin{background:linear-gradient(135deg,#1a0b3d,#7b2ff7 55%,#f107a3)}
+
+  /* Preguntas de seguridad (admin) */
+  .sec{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(123,47,247,.55),rgba(10,4,25,.93));backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+  .sec.show{opacity:1;visibility:visible}
+  .sec-card{width:min(100%,450px);padding:28px;border-radius:24px;background:linear-gradient(160deg,#241046,#12082b);border:1px solid rgba(241,7,163,.5);box-shadow:0 0 60px rgba(241,7,163,.3),0 30px 80px rgba(0,0,0,.5);color:#fff;transform:translateY(40px) scale(.92) rotate(-2deg);transition:transform .6s cubic-bezier(.2,1.4,.4,1)}
+  .sec.show .sec-card{transform:none}
+  .sec-card.shake{animation:shake .45s}
+  .sec-ico{font-size:2.4rem;text-align:center;animation:bob2 2.4s ease-in-out infinite}
+  @keyframes bob2{50%{transform:translateY(-6px) rotate(6deg)}}
+  .sec h3{font-family:"Fraunces",Georgia,serif;text-align:center;font-size:1.4rem;margin:4px 0}
+  .sec-sub{text-align:center;color:#c7b8ee;font-size:.9rem;margin-bottom:16px}
+  .sec label{color:#f0e8ff;font-size:.9rem;font-weight:600;margin-bottom:12px;opacity:0;transform:translateX(-18px)}
+  .sec label span{display:block;margin-bottom:6px}
+  .sec.show label{animation:sqin .5s forwards;animation-delay:calc(var(--i) * .12s + .3s)}
+  @keyframes sqin{to{opacity:1;transform:none}}
+  .sec input{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff}
+  .sec input::placeholder{color:#8b7bb8}
+  .sec input:focus{background:rgba(255,255,255,.12);border-color:#f107a3;box-shadow:0 0 0 4px rgba(241,7,163,.25)}
+  .sec-msg{min-height:1.4em;text-align:center;font-size:.86rem;color:#ff8fb8;margin:2px 0 10px}
+  .sec-msg.ok{color:#6cf2b0}
+  .sec-acts{display:flex;gap:10px}
+  .sec-acts button{width:auto;flex:1}
+  .sec-go{background:linear-gradient(90deg,#7b2ff7,#f107a3);color:#fff;box-shadow:0 10px 24px rgba(241,7,163,.3)}
+  .sec-cancel{background:rgba(255,255,255,.1);color:#fff}
+  .sec-go:disabled{opacity:.5;cursor:not-allowed}
+
+  button{position:relative;overflow:hidden;width:100%;font:inherit;font-weight:700;font-size:1.02rem;color:var(--deep);background:#cfe0c4;border:0;border-radius:12px;padding:14px;cursor:pointer;transition:background .4s,color .4s,transform .15s,box-shadow .3s}
+  button.ready{background:var(--forest);color:#fff;box-shadow:0 10px 22px rgba(31,77,46,.28)}
+  button.ready::after{content:"";position:absolute;inset:0 auto 0 -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(242,194,48,.55),transparent);transform:skewX(-20deg);animation:shine 2.6s ease-in-out infinite}
+  @keyframes shine{0%,40%{left:-60%}100%{left:130%}}
+  button:hover{transform:translateY(-2px)}button:active{transform:scale(.98)}
+  button:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+  button .spin{display:none;width:16px;height:16px;margin-right:10px;vertical-align:-3px;border:2.5px solid rgba(255,255,255,.35);border-top-color:var(--sun);border-radius:50%;animation:girar .8s linear infinite}
+  button.checking{background:var(--forest);color:#fff;cursor:progress;transform:none}
+  button.checking .spin{display:inline-block}
+  button.checking::after{display:none}
+  button.checking::before{content:"";position:absolute;left:0;bottom:0;height:4px;width:var(--p,0%);background:var(--sun);transition:width .95s linear}
+  button.verified{background:var(--ok);color:#fff}
+  button.denied{background:var(--bad);color:#fff;animation:shake .45s}
+  #btnlabel.fade{display:inline-block;animation:aparece .4s ease both}
+  @keyframes girar{to{transform:rotate(360deg)}}
+  @keyframes aparece{from{opacity:0;transform:translateY(6px)}}
+  .privacy{font-size:.75rem;line-height:1.5;color:var(--muted);margin-top:14px;text-align:center}
+
+  /* Bienvenida */
+  .welcome{position:fixed;inset:0;z-index:10;display:grid;place-items:center;text-align:center;padding:24px;background:var(--forest);color:#fff;clip-path:circle(0% at 70% 40%);pointer-events:none}
+  .welcome.show{clip-path:circle(150% at 70% 40%);transition:clip-path 1.1s cubic-bezier(.7,0,.3,1);pointer-events:auto}
+  .welcome h2{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.8rem,6vw,3rem);line-height:1.15}
+  .welcome p{font-size:1.15rem;margin-top:12px;color:var(--cream)}
+  .welcome .dots{margin-top:10px;color:var(--sun)}
+  .welcome .dots span{display:inline-block;font-size:2.2rem;animation:dot 1s infinite}
+  .welcome .dots span:nth-child(2){animation-delay:.2s}.welcome .dots span:nth-child(3){animation-delay:.4s}
+  @keyframes dot{50%{transform:translateY(-9px)}}
+
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr}
+    .brand{padding:24px 22px;gap:14px}
+    .b-mid h2{font-size:1.55rem;margin:8px 0 0}
+    .lead,.quotes,.stats,.rings,.vine,.eyebrow{display:none}
+    .b-foot{display:none}
+    .side{padding:26px 16px 40px}
+  }
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.quotes p:first-child{opacity:1}}
+</style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="brand">
+      <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+      <svg class="vine" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0 70 C80 20 140 90 230 50 S380 10 460 55 S560 70 600 30"/></svg>
+
+      <div class="b-top">
+        <img class="emblem" src="images/logo2.png" alt="" onerror="this.style.display='none'">
+        <div><strong>Institución Educativa Infantas</strong><span>Área de Ética · Año 2026</span></div>
+      </div>
+
+      <div class="b-mid">
+        <span class="eyebrow">Plataforma educativa</span>
+        <h2>Un espacio para aprender, <em>pensar</em> y descubrir</h2>
+        <p class="lead">Blogs y proyectos de los grados 10º y 11º. Reflexión, valores y pensamiento crítico al alcance de toda la comunidad.</p>
+        <div class="quotes" aria-hidden="true">
+          <p>Cada pregunta nos acerca a una nueva respuesta.</p>
+          <p>Pensar antes de actuar cambia el futuro.</p>
+          <p>Cada idea tiene algo que enseñar.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><b data-n="6">0</b><span>Grados con proyectos</span></div>
+          <div class="stat"><b data-n="100" data-s="+">0</b><span>Blogs disponibles</span></div>
+        </div>
+      </div>
+
+      <div class="b-foot"><span>&copy; <span id="yr">2026</span> Institución Educativa Infantas</span><span>Infantas Web</span></div>
+    </aside>
+
+    <section class="side">
+      <div id="blobs" aria-hidden="true"></div>
+
+      <main class="login" id="card">
+        <div class="top">
+          <svg class="plant" id="plant" viewBox="0 0 160 160" aria-hidden="true">
+            <g class="grow">
+              <path class="stem" pathLength="100" d="M80 126 C80 105 78 85 80 62" stroke="#2f7d46" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <path class="leaf l" d="M80 100 C60 98 48 84 46 72 C64 72 78 82 80 100Z" fill="#5aa469"/>
+              <path class="leaf r" d="M80 88 C100 86 112 72 114 60 C96 60 82 70 80 88Z" fill="#7bbf84"/>
+              <g class="flower">
+                <g fill="#f2c230">
+                  <ellipse cx="80" cy="40" rx="7" ry="13"/><ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(45 80 55)"/>
+                  <ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(90 80 55)"/><ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(135 80 55)"/>
+                  <ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(180 80 55)"/><ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(225 80 55)"/>
+                  <ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(270 80 55)"/><ellipse cx="80" cy="40" rx="7" ry="13" transform="rotate(315 80 55)"/>
+                </g>
+                <circle cx="80" cy="55" r="9" fill="#1f4d2e"/>
+              </g>
+            </g>
+            <circle class="sp" cx="58" cy="40" r="3"/><circle class="sp" cx="104" cy="34" r="2.5"/><circle class="sp" cx="86" cy="18" r="2.5"/>
+            <path d="M52 132h56l-6 26H58z" fill="#2f6b3f"/><rect x="47" y="124" width="66" height="10" rx="4" fill="#1f4d2e"/>
+            <circle class="seed" cx="80" cy="124" r="4" fill="#f2c230"/>
+          </svg>
+          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0" id="bar"><i id="barfill"></i></div>
+        </div>
+
+        <div class="body">
+          <span class="tag">Acceso a la plataforma</span>
+          <h1>Infantas Web - Blog</h1>
+          <p class="sub">Completa los datos para ingresar</p>
+
+          <form id="form" method="post" novalidate autocomplete="off">
+            <div class="field rise" style="--i:1">
+              <label for="u">Nombre</label>
+              <input type="text" id="u" name="u" placeholder="Ej: Laura Gómez" maxlength="40" aria-describedby="hu" required>
+              <div class="hint" id="hu" aria-live="polite">Tu nombre real, empezando con mayúscula.</div>
+            </div>
+            <div class="field rise" style="--i:2">
+              <label for="p">Rol</label>
+              <input type="text" id="p" name="p" placeholder="Docente, Estudiante o Visitante" maxlength="11" aria-describedby="hp" required>
+              <div class="hint" id="hp" aria-live="polite">Escríbelo tal cual: Docente, Estudiante o Visitante.</div>
+              <div class="chips" aria-hidden="true"><span class="chip est" data-r="Estudiante">Estudiante</span><span class="chip doc" data-r="Docente">Docente</span><span class="chip vis" data-r="Visitante">Visitante</span></div>
+            </div>
+            <div class="tipo-box" id="tipoBox" inert aria-hidden="true">
+              <span class="lbl" id="tipoLbl">¿Cómo nos visitas?</span>
+              <div class="tipos" role="radiogroup" aria-labelledby="tipoLbl">
+                <label class="opt"><input type="radio" name="tipo" value="Particular"><span>Particular</span></label>
+                <label class="opt"><input type="radio" name="tipo" value="Padre de familia"><span>Padre de familia</span></label>
+                <label class="opt"><input type="radio" name="tipo" value="Egresado"><span>Egresado</span></label>
+              </div>
+              <div class="hint" id="ht" aria-live="polite"></div>
+            </div>
+            <div class="rise" style="--i:3"><button type="submit" id="btn"><span class="spin" aria-hidden="true"></span><span id="btnlabel" aria-live="polite">Ingresar</span></button></div>
+          </form>
+
+          <p class="privacy rise" style="--i:4">Tus datos no se envían a ningún servidor. Solo se guardan temporalmente en tu navegador para saludarte y se borran al cerrar la pestaña o al salir.</p>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <div class="sec" id="sec" role="dialog" aria-modal="true" aria-labelledby="secT" aria-hidden="true">
+    <form class="sec-card" id="secForm" autocomplete="off" novalidate>
+      <div class="sec-ico" aria-hidden="true">🛡️</div>
+      <h3 id="secT">Verificación de seguridad</h3>
+      <p class="sec-sub">Responde las 3 preguntas para continuar.</p>
+      <label style="--i:1"><span>1. ¿Qué sistema operativo usas?</span><input type="text" placeholder="Tu respuesta" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+      <label style="--i:2"><span>2. Nombre del proyecto audiovisual de Juan (en minúscula)</span><input type="text" placeholder="Tu respuesta" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+      <label style="--i:3"><span>3. ¿Qué editor de código se usó para crear la página?</span><input type="text" placeholder="Tu respuesta" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+      <div class="sec-msg" id="secMsg" aria-live="polite"></div>
+      <div class="sec-acts"><button type="button" class="sec-cancel" id="secNo">Cancelar</button><button type="submit" class="sec-go" id="secGo">Verificar</button></div>
+    </form>
+  </div>
+
+  <div class="welcome" id="welcome" role="status" aria-live="polite">
+    <div>
+      <h2 id="wtitle"></h2>
+      <p id="wsub"></p>
+      <div class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></div>
+    </div>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const card = $('card'), plant = $('plant'), btn = $('btn');
+  const uIn = $('u'), pIn = $('p'), hu = $('hu'), hp = $('hp');
+
+  /* ================= FILTRO DE NOMBRES =================
+     Edita estas listas para agregar o quitar palabras (en minúscula y sin tildes). */
+  const ROLES = ['Docente', 'Estudiante', 'Visitante'];
+
+  // Palabras completas: groserías, partes del cuerpo y palabras al azar.
+  const BLOCKED_WORDS = [
+    // Groserías / insultos
+    'puta','puto','putas','putos','mierda','carajo','marica','maricon','gonorrea','malparido','malparida',
+    'pendejo','pendeja','cabron','cabrona','chingar','verga','cono','culero','culera','idiota','estupido',
+    'estupida','imbecil','zorra','perra','cagar','joder','follar','hp','hpta','pija','polla','huevon','webon',
+    'basura','asco','tarado','tarada','mamon','mamona','guevon','mondá','monda',
+    // Partes del cuerpo
+    'pene','vagina','culo','teta','tetas','nalga','nalgas','pito','pecho','pechos','trasero','ano','cabeza',
+    'mano','manos','pie','pies','nariz','oreja','orejas','ojo','ojos','boca','dedo','dedos','brazo','brazos',
+    'pierna','piernas','rodilla','codo','cuello','hombro','espalda','estomago','barriga','panza','ombligo',
+    'lengua','diente','dientes','pelo','cara','frente','higado','corazon','cerebro','pulmon','hueso','piel',
+    'cadera','tobillo','muneca','talon','pantorrilla','cintura','mejilla','ceja','pestana','menton','muslo',
+    // Cosas al azar / nombres de relleno
+    'test','tester','prueba','admin','usuario','nombre','anonimo','nadie','ninguno','fulano','fulana','mengano',
+    'zutano','hola','chao','xd','lol','batman','superman','spiderman','goku','naruto','pikachu','shrek','gato',
+    'perro','pepino','banano','tomate','pizza','mesa','silla','taco','nada','ejemplo','asdf','qwerty'
+  ];
+  // Fragmentos largos e inconfundibles (se buscan dentro de cualquier texto).
+  const BLOCKED_PARTS = ['hijueputa','hijoeputa','hijuep','malparid','gonorrea','mierda','maricon','carajo','pendej','cabron','chingad','culiad'];
+
+  const strip = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const collapse = s => s.replace(/(.)\1+/g, '$1');            // "puuuta" -> "puta"
+  const WORDSET = new Set(BLOCKED_WORDS.map(w => collapse(strip(w))));
+  const PARTS = BLOCKED_PARTS.map(w => collapse(strip(w)));
+
+  function isVulgar(text) {
+    const tokens = collapse(strip(text)).split(/\s+/);
+    if (tokens.some(t => WORDSET.has(t))) return true;
+    const joined = tokens.join('');
+    return PARTS.some(p => joined.includes(p));
+  }
+  function isGibberish(text) {
+    return strip(text).split(/\s+/).some(t =>
+      (t.length >= 3 && !/[aeiouy]/.test(t)) ||            // sin vocales
+      /[^aeiouy]{5,}/.test(t) ||                           // demasiadas consonantes seguidas
+      /(.)\1{2,}/.test(t) ||                               // aaa, xxx
+      /^(?:ja|je|ji|jo|ju|ha|he|ke|ki)+$/.test(t) ||       // jajaja
+      /asdf|sdfg|dfgh|fghj|ghjk|hjkl|qwer|wert|erty|rtyu|tyui|yuio|uiop|zxcv|xcvb|cvbn|vbnm/.test(t)
+    );
+  }
+
+  /* ---------- Validación ---------- */
+  function checkName(v) {
+    v = v.trim().replace(/\s+/g, ' ');
+    if (!v) return { ok: false, msg: 'Escribe tu nombre.' };
+    if (!/^\p{L}+(?: \p{L}+)*$/u.test(v)) return { ok: false, msg: 'Usa solo letras, sin números ni símbolos.' };
+    if (v.split(' ').some(w => w.length < 2)) return { ok: false, msg: 'Cada parte del nombre debe tener al menos 2 letras.' };
+    if (isVulgar(v)) return { ok: false, msg: 'Ese nombre no es apropiado para este espacio. Escribe tu nombre real.' };
+    if (isGibberish(v)) return { ok: false, msg: 'Eso parece texto al azar. Escribe tu nombre real.' };
+    if (v.split(' ').some(w => !CONECTORES.includes(w.toLowerCase()) && !/^\p{Lu}/u.test(w))) return { ok: false, msg: 'Cada nombre debe empezar con mayúscula. Ej: Laura Gómez' };
+    return { ok: true, msg: 'Nombre válido.' };
+  }
+  function checkRole(v) {
+    v = v.trim();
+    if (!v) return { ok: false, msg: 'Escribe Docente, Estudiante o Visitante.' };
+    if (ROLES.includes(v)) return { ok: true, msg: 'Rol válido.' };
+    const m = ROLES.find(r => r.toLowerCase() === v.toLowerCase());
+    if (m) return { ok: false, msg: 'Casi. Escríbelo tal cual, con mayúscula inicial: ' + m };
+    return { ok: false, msg: 'Solo se acepta Docente, Estudiante o Visitante.' };
+  }
+  function paint(input, hint, r, show) {
+    input.classList.toggle('ok', show && r.ok);
+    input.classList.toggle('bad', show && !r.ok);
+    hint.className = 'hint' + (show ? (r.ok ? ' ok' : ' bad') : '');
+    if (show) hint.textContent = r.msg;
+  }
+  let touchedU = false, touchedP = false;
+  function update() {
+    if (esAdmin()) {
+      [uIn, pIn].forEach(i => i.classList.remove('ok', 'bad'));
+      hu.className = hp.className = 'hint';
+      hu.textContent = 'Tu nombre real, empezando con mayúscula.';
+      hp.textContent = 'Escríbelo tal cual: Docente, Estudiante o Visitante.';
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      $('tipoBox').classList.remove('show'); $('tipoBox').inert = true;
+      plant.setAttribute('class', 'plant s2 adm'); $('barfill').style.width = '100%';
+      btn.classList.add('ready', 'adm');
+      return { ru: { ok: true }, rp: { ok: true }, all: true };
+    }
+    btn.classList.remove('adm');
+    const ru = checkName(uIn.value), rp = checkRole(pIn.value);
+    paint(uIn, hu, ru, touchedU && uIn.value !== '');
+    paint(pIn, hp, rp, touchedP && pIn.value !== '');
+    const esVis = rp.ok && pIn.value.trim() === 'Visitante';
+    const tbox = $('tipoBox');
+    tbox.classList.toggle('show', esVis);
+    tbox.inert = !esVis; tbox.setAttribute('aria-hidden', esVis ? 'false' : 'true');
+    if (!esVis) document.querySelectorAll('input[name=tipo]').forEach(r => { r.checked = false; });
+    const tipoOk = !esVis || !!tipoSel();
+    const stage = (ru.ok ? 1 : 0) + (rp.ok && tipoOk ? 1 : 0);
+    plant.setAttribute('class', 'plant' + (stage ? ' s' + stage : ''));
+    $('barfill').style.width = stage * 50 + '%';
+    $('bar').setAttribute('aria-valuenow', stage);
+    btn.classList.toggle('ready', stage === 2);
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', rp.ok && c.dataset.r === pIn.value.trim()));
+    return { ru, rp, all: stage === 2 };
+  }
+  uIn.addEventListener('input', () => { touchedU = true; update(); });
+  pIn.addEventListener('input', () => { touchedP = true; update(); });
+
+  /* ---------- Lista de docentes ----------
+     Se acepta solo el nombre, solo el apellido o ambos (en orden). Una línea por docente. */
+  const DOCENTES = [
+    'Maria Rosario', 'Salvador Cobos', 'Maria del Carmen', 'Edith Meker', 'Laura Baena', 'Genny Andrea',
+    'Claudia Patricia', 'Luis Fernando', 'Javier Serrano', 'Luisa Fernanda', 'Monica Cristina',
+    'Yolima Del Pilar', 'Arnulfo Sepulveda', 'Fabio Duran', 'Ginna Julieth', 'Liliana Ibarguen', 'Clelia Smith',
+    'Karen Julieth'
+  ];
+  const CONECTORES = ['de', 'del', 'la', 'las', 'los', 'y'];
+  const palabras = s => strip(s).trim().split(/\s+/);
+  function esDocente(nombre) {
+    const t = palabras(nombre);
+    if (CONECTORES.includes(t[0]) || CONECTORES.includes(t[t.length - 1])) return false;
+    return DOCENTES.some(d => {
+      const dt = palabras(d); let i = 0;
+      for (const w of t) { i = dt.indexOf(w, i); if (i < 0) return false; i++; }
+      return true;
+    });
+  }
+
+  /* ---------- Animación "Verificando…" ---------- */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const label = $('btnlabel');
+  function setLabel(t) { label.textContent = t; label.classList.remove('fade'); void label.offsetWidth; label.classList.add('fade'); }
+  async function verificarDocente() {
+    btn.disabled = true; uIn.readOnly = pIn.readOnly = true;
+    btn.classList.add('checking');
+    await sleep(30);
+    const pasos = ['Verificando datos…', 'Comprobando lista de docentes…', 'Validando identidad…'];
+    for (let i = 0; i < pasos.length; i++) {
+      setLabel(pasos[i]);
+      btn.style.setProperty('--p', ((i + 1) * 33.4) + '%');
+      await sleep(950);
+    }
+    const ok = esDocente(uIn.value);
+    btn.classList.remove('checking'); btn.style.removeProperty('--p');
+    if (ok) {
+      btn.classList.add('verified'); setLabel('Docente verificado ✓');
+      await sleep(900);
+      return true;
+    }
+    btn.classList.add('denied'); setLabel('No se pudo verificar');
+    plant.setAttribute('class', 'plant s1'); $('barfill').style.width = '50%';
+    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en la lista de docentes. Revísalo o ingresa con otro rol.' }, true);
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    await sleep(1800);
+    btn.classList.remove('denied'); setLabel('Ingresar');
+    btn.disabled = false; uIn.readOnly = pIn.readOnly = false; uIn.focus();
+    return false;
+  }
+
+  /* ---------- Acceso de administrador (oculto) ----------
+     Se activa escribiendo ADMIN.user en Nombre y ADMIN.rol en Rol. Cámbialos por algo que solo tú sepas. */
+  const ADMIN = { user: 'admin', rol: 'adminrol226', nombre: 'JuamCOL' };
+  const esAdmin = () => uIn.value.trim().toLowerCase() === ADMIN.user && pIn.value.trim().toLowerCase() === ADMIN.rol;
+  async function entrarAdmin() {
+    btn.disabled = true; uIn.readOnly = pIn.readOnly = true;
+    btn.classList.add('checking', 'adm');
+    await sleep(30);
+    const pasos = ['Verificando credenciales…', 'Autenticando administrador…', 'Cargando panel…'];
+    for (let i = 0; i < pasos.length; i++) {
+      setLabel(pasos[i]); btn.style.setProperty('--p', ((i + 1) * 33.4) + '%'); await sleep(850);
+    }
+    btn.classList.remove('checking'); btn.classList.add('verified'); setLabel('Acceso concedido ✓');
+    try {
+      sessionStorage.setItem('admin', '1');
+      sessionStorage.setItem('usuario', JSON.stringify({ nombre: ADMIN.nombre, rol: 'Admin', tipo: '' }));
+    } catch (err) {}
+    await sleep(600);
+    $('wtitle').textContent = 'Bienvenido, ' + ADMIN.nombre;
+    $('wsub').textContent = 'Abriendo el panel de administración';
+    $('welcome').classList.add('admin', 'show');
+    setTimeout(() => { window.location.href = './admin.html'; }, 2500);
+  }
+
+  /* ---------- Preguntas de seguridad del admin ----------
+     Las respuestas no están escritas en el código: se guardan como huellas (números).
+     Para cambiar una, abre la consola del navegador en esta página y ejecuta h53('NuevaRespuesta'); pega el número en SEG. */
+  const h53 = (s, seed = 0) => { let a = 0xdeadbeef ^ seed, b = 0x41c6ce57 ^ seed; for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); } a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909); b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909); return 4294967296 * (2097151 & b) + (a >>> 0); };
+  const SEG = [4120791596001276, 8252721565375576, 2271514558588381];
+  const secEl = $('sec'), secForm = $('secForm'), secMsg = $('secMsg'), secGo = $('secGo');
+  let contando = null;
+  function bloqueo() {
+    try { return Math.max(0, Math.ceil(((+sessionStorage.getItem('adminLock') || 0) - Date.now()) / 1000)); } catch (e) { return 0; }
+  }
+  function cuenta() {
+    clearTimeout(contando);
+    const s = bloqueo();
+    if (s <= 0) { secGo.disabled = false; secMsg.className = 'sec-msg'; secMsg.textContent = ''; return; }
+    secGo.disabled = true; secMsg.className = 'sec-msg'; secMsg.textContent = 'Demasiados intentos. Espera ' + s + ' s…';
+    contando = setTimeout(cuenta, 500);
+  }
+  let fallos = 0;
+  function pedirSeguridad() {
+    return new Promise(resolve => {
+      const ins = secForm.querySelectorAll('input');
+      ins.forEach(i => { i.value = ''; });
+      secMsg.className = 'sec-msg'; secMsg.textContent = '';
+      secEl.classList.add('show'); secEl.setAttribute('aria-hidden', 'false');
+      cuenta();
+      setTimeout(() => ins[0].focus(), 600);
+      const cerrar = ok => {
+        secEl.classList.remove('show'); secEl.setAttribute('aria-hidden', 'true');
+        secForm.onsubmit = null; $('secNo').onclick = null; clearTimeout(contando); resolve(ok);
+      };
+      $('secNo').onclick = () => cerrar(false);
+      secForm.onsubmit = e => {
+        e.preventDefault();
+        if (bloqueo() > 0) { cuenta(); return; }
+        const ok = SEG.every((h, i) => h53(ins[i].value.trim()) === h);
+        if (ok) {
+          secMsg.className = 'sec-msg ok'; secMsg.textContent = 'Identidad confirmada ✓'; secGo.disabled = true;
+          setTimeout(() => { secGo.disabled = false; cerrar(true); }, 700);
+          return;
+        }
+        fallos++;
+        secForm.classList.remove('shake'); void secForm.offsetWidth; secForm.classList.add('shake');
+        if (fallos >= 3) {
+          fallos = 0;
+          try { sessionStorage.setItem('adminLock', Date.now() + 30000); } catch (err) {}
+          cuenta();
+        } else {
+          secMsg.className = 'sec-msg'; secMsg.textContent = 'Alguna respuesta es incorrecta. Intento ' + fallos + ' de 3.';
+        }
+      };
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && secEl.classList.contains('show')) $('secNo').click(); });
+
+  /* ---------- Tipo de visitante ---------- */
+  function tipoSel() {
+    if (pIn.value.trim() !== 'Visitante') return '';
+    const r = document.querySelector('input[name=tipo]:checked');
+    return r ? r.value : '';
+  }
+  function errTipo() { const h = $('ht'); h.className = 'hint bad'; h.textContent = 'Elige una opción para continuar.'; }
+  document.querySelectorAll('input[name=tipo]').forEach(r => r.addEventListener('change', () => {
+    $('ht').className = 'hint'; $('ht').textContent = ''; update();
+  }));
+
+  /* ---------- Envío ---------- */
+  $('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (esAdmin()) { if (await pedirSeguridad()) await entrarAdmin(); return; }
+    touchedU = touchedP = true;
+    const { ru, rp, all } = update();
+    if (!all) {
+      paint(uIn, hu, ru, true); paint(pIn, hp, rp, true);
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      if (ru.ok && rp.ok) { errTipo(); document.querySelector('input[name=tipo]').focus(); }
+      else (ru.ok ? pIn : uIn).focus();
+      return;
+    }
+    if (pIn.value.trim() === 'Docente' && !(await verificarDocente())) return;
+    btn.disabled = true;
+    try { sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: pIn.value.trim(), tipo: tipoSel() })); } catch (err) {}
+    $('wtitle').textContent = 'Bienvenido(a), ' + uIn.value.trim();
+    $('wsub').textContent = 'Ingresando como ' + pIn.value.trim() + (tipoSel() ? ' (' + tipoSel() + ')' : '') + ' a Infantas Web - Blog';
+    $('welcome').classList.add('show');
+    setTimeout(() => { window.location.href = './home.html'; }, 3000);
+  });
+
+  /* ---------- Formas de fondo ---------- */
+  const box = $('blobs'), tones = ['#cfe6b8', '#f7e08a', '#a9d6a8', '#fbeeb0'];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('span'), size = 70 + Math.random() * 190;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;` +
+      `background:${tones[i % 4]};opacity:${.28 + Math.random() * .25};filter:blur(${6 + Math.random() * 14}px)`;
+    s.style.setProperty('--x', (Math.random() * 120 - 60) + 'px');
+    s.style.setProperty('--y', (Math.random() * 120 - 60) + 'px');
+    s.style.setProperty('--d', (7 + Math.random() * 8) + 's');
+    s.style.setProperty('--delay', (-Math.random() * 8) + 's');
+    box.appendChild(s);
+  }
+</script>
+<script>
+  /* Contadores del panel institucional y año del pie */
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  document.querySelectorAll('[data-n]').forEach(el => {
+    const n = +el.dataset.n, suf = el.dataset.s || '';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = n + suf; return; }
+    let t0; const step = t => {
+      t0 = t0 || t; const p = Math.min((t - t0) / 1600, 1);
+      el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))) + (p === 1 ? suf : '');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    setTimeout(() => requestAnimationFrame(step), 700);
+  });
+</script>
+</body>
+</html>

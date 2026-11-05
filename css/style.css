@@ -20422,3 +20422,53 @@ html .footer-corporate.bg-gray-dark .footer-corporate-bottom-panel a:hover { col
 	.desktop .box-icon-leah:hover, .desktop .box-contacts:hover,
 	.desktop .post-creative:hover, .desktop .box-categories:hover { transform: none; }
 }
+
+/* =====================================================================
+   MENÚ MÓVIL (barra superior y menú desplegable) - VERDE OSCURO
+   Solo afecta al modo móvil/tablet (rd-navbar-fixed); el escritorio no cambia.
+   Para otro tono, cambia #0f3d24 (barra y menú) y #15803d (opción activa).
+   ===================================================================== */
+.rd-navbar-fixed .rd-navbar-panel {
+	color: #ffffff;
+	background: #0f3d24;
+	box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+.rd-navbar-fixed .rd-navbar-nav-wrap {
+	color: #ffffff;
+	background: #0f3d24;
+	border: 0;
+	border-right: 1px solid rgba(255, 255, 255, 0.12);
+	box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.rd-navbar-fixed .rd-navbar-nav {
+	border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.rd-navbar-fixed .rd-nav-link {
+	color: #e8f5ec;
+}
+
+.rd-navbar-fixed .rd-nav-item:hover .rd-nav-link,
+.rd-navbar-fixed .rd-nav-item.focus .rd-nav-link,
+.rd-navbar-fixed .rd-nav-item.active .rd-nav-link,
+.rd-navbar-fixed .rd-nav-item.opened .rd-nav-link {
+	color: #ffffff;
+	background: #15803d;
+}
+
+.rd-navbar-fixed .rd-navbar-nav-wrap::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.35);
+}
+
+.rd-navbar-fixed .rd-navbar-nav-wrap::-webkit-scrollbar-track {
+	background: #0a2d1a;
+}
+
+/* Logo sobre fondo oscuro: si el logo se pierde, descomenta UNA de estas dos opciones.
+   Opción A: caja blanca detrás del logo
+.rd-navbar-fixed .rd-navbar-brand img { background: #ffffff; border-radius: 8px; padding: 3px 8px; }
+   Opción B: logo todo en blanco (pierde sus colores)
+.rd-navbar-fixed .rd-navbar-brand img { filter: brightness(0) invert(1); }
+*/

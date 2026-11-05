@@ -145,6 +145,31 @@
   .sec-cancel{background:rgba(255,255,255,.1);color:#fff}
   .sec-go:disabled{opacity:.5;cursor:not-allowed}
 
+  /* Curso (Estudiante) y PIN (Docente) */
+  .tipo-box.alto.show{max-height:240px}
+  .sel{width:100%;font:inherit;font-size:1rem;color:var(--deep);border:1.5px solid var(--line);border-radius:12px;padding:12px 38px 12px 14px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .25s,box-shadow .25s;
+    background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%231f4d2e' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center}
+  .sel:focus{border-color:var(--leaf);box-shadow:0 0 0 4px rgba(90,164,105,.18);background-color:#fff}
+  .sel.ok{border-color:var(--ok)}.sel.bad{border-color:var(--bad)}
+  .pin-wrap{position:relative}
+  input.pin-in{text-align:center;font-size:1.35rem;font-weight:700;letter-spacing:.55em;padding-left:calc(14px + .55em)}
+  .relink{width:auto;margin-top:6px;padding:0;background:none;border:0;border-radius:0;box-shadow:none;color:var(--leaf);font-size:.82rem;font-weight:700;text-decoration:underline;cursor:pointer}
+  .relink:hover,.relink:active{transform:none;color:var(--forest)}
+  .nube{position:absolute;right:4px;bottom:calc(100% - 2px);z-index:5;min-width:176px;padding:14px 26px 12px;border-radius:46px;background:#fff;color:var(--forest);text-align:center;pointer-events:none;
+    opacity:0;transform:translateY(14px) scale(.6);transform-origin:80% 100%;transition:opacity .35s,transform .5s cubic-bezier(.3,1.6,.5,1);filter:drop-shadow(0 8px 14px rgba(31,77,46,.32))}
+  .nube::before,.nube::after,.nube i{content:"";position:absolute;background:#fff;border-radius:50%}
+  .nube::before{width:48px;height:48px;top:-22px;left:24px}
+  .nube::after{width:64px;height:64px;top:-34px;right:26px}
+  .nube i:nth-of-type(1){width:15px;height:15px;right:34px;bottom:-14px}
+  .nube i:nth-of-type(2){width:8px;height:8px;right:22px;bottom:-27px}
+  .nube small{display:block;font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+  .nube strong{display:block;font-family:"Fraunces",Georgia,serif;font-size:2rem;letter-spacing:.3em;margin:2px 0 8px .3em;color:var(--forest)}
+  .nube b{display:block;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--sun),var(--leaf));transform-origin:left}
+  .nube.show{opacity:1;transform:none;animation:flota 3s ease-in-out .5s infinite}
+  .nube.show b{animation:cuenta 5s linear forwards}
+  @keyframes flota{50%{transform:translateY(-6px)}}
+  @keyframes cuenta{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
   button{position:relative;overflow:hidden;width:100%;font:inherit;font-weight:700;font-size:1.02rem;color:var(--deep);background:#cfe0c4;border:0;border-radius:12px;padding:14px;cursor:pointer;transition:background .4s,color .4s,transform .15s,box-shadow .3s}
   button.ready{background:var(--forest);color:#fff;box-shadow:0 10px 22px rgba(31,77,46,.28)}
   button.ready::after{content:"";position:absolute;inset:0 auto 0 -60%;width:40%;background:linear-gradient(100deg,transparent,rgba(242,194,48,.55),transparent);transform:skewX(-20deg);animation:shine 2.6s ease-in-out infinite}
@@ -256,6 +281,24 @@
               <input type="text" id="p" name="p" placeholder="Docente, Estudiante o Visitante" maxlength="11" aria-describedby="hp" required>
               <div class="hint" id="hp" aria-live="polite">Escríbelo tal cual: Docente, Estudiante o Visitante.</div>
               <div class="chips" aria-hidden="true"><span class="chip est" data-r="Estudiante">Estudiante</span><span class="chip doc" data-r="Docente">Docente</span><span class="chip vis" data-r="Visitante">Visitante</span></div>
+            </div>
+            <div class="tipo-box alto" id="cursoBox" inert aria-hidden="true">
+              <label for="curso">Curso</label>
+              <select class="sel" id="curso" name="curso" aria-describedby="hc">
+                <option value="">Selecciona tu curso</option>
+                <option>10 A</option><option>10 B</option><option>10 C</option>
+                <option>11 A</option><option>11 B</option><option>11 C</option>
+              </select>
+              <div class="hint" id="hc" aria-live="polite">Elige el curso al que perteneces.</div>
+            </div>
+            <div class="pin-wrap">
+              <div class="nube" id="nube" role="status" aria-live="polite"><small>Tu Pin es:</small><strong id="nubePin">----</strong><b></b><i></i><i></i></div>
+              <div class="tipo-box alto" id="pinBox" inert aria-hidden="true">
+                <label for="pin">PIN de 4 dígitos</label>
+                <input type="text" id="pin" class="pin-in" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••" aria-describedby="hpin">
+                <div class="hint" id="hpin" aria-live="polite">Escribe el PIN que aparece en la nube.</div>
+                <button type="button" class="relink" id="repin">¿No alcanzaste a verlo? Obtener PIN de nuevo</button>
+              </div>
             </div>
             <div class="tipo-box" id="tipoBox" inert aria-hidden="true">
               <span class="lbl" id="tipoLbl">¿Cómo nos visitas?</span>
@@ -381,6 +424,7 @@
       hp.textContent = 'Escríbelo tal cual: Docente, Estudiante o Visitante.';
       document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
       $('tipoBox').classList.remove('show'); $('tipoBox').inert = true;
+      mostrar($('cursoBox'), false); mostrar($('pinBox'), false); if (pinVisible) { resetPin(); pinVisible = false; }
       plant.setAttribute('class', 'plant s2 adm'); $('barfill').style.width = '100%';
       btn.classList.add('ready', 'adm');
       return { ru: { ok: true }, rp: { ok: true }, all: true };
@@ -395,7 +439,18 @@
     tbox.inert = !esVis; tbox.setAttribute('aria-hidden', esVis ? 'false' : 'true');
     if (!esVis) document.querySelectorAll('input[name=tipo]').forEach(r => { r.checked = false; });
     const tipoOk = !esVis || !!tipoSel();
-    const stage = (ru.ok ? 1 : 0) + (rp.ok && tipoOk ? 1 : 0);
+    const rolTxt = pIn.value.trim();
+    const esEst = rp.ok && rolTxt === 'Estudiante';
+    const esDoc = rp.ok && rolTxt === 'Docente' && ru.ok && esDocente(uIn.value);
+    mostrar($('cursoBox'), esEst);
+    if (!esEst) { $('curso').value = ''; $('curso').classList.remove('ok', 'bad'); }
+    mostrar($('pinBox'), esDoc);
+    if (esDoc && !pinVisible) nuevoPin(true);
+    if (!esDoc && pinVisible) resetPin();
+    pinVisible = esDoc;
+    const cursoOk = !esEst || $('curso').value !== '';
+    const pinOk = !esDoc || (pinActual !== '' && pinIn.value === pinActual);
+    const stage = (ru.ok ? 1 : 0) + (rp.ok && tipoOk && cursoOk && pinOk ? 1 : 0);
     plant.setAttribute('class', 'plant' + (stage ? ' s' + stage : ''));
     $('barfill').style.width = stage * 50 + '%';
     $('bar').setAttribute('aria-valuenow', stage);
@@ -459,7 +514,7 @@
 
   /* ---------- Acceso de administrador (oculto) ----------
      Se activa escribiendo ADMIN.user en Nombre y ADMIN.rol en Rol. Cámbialos por algo que solo tú sepas. */
-  const ADMIN = { user: 'admin', rol: 'adminrol226', nombre: 'JuamCOL' };
+  const ADMIN = { user: 'adminjuans', rol: 'adminrol226', nombre: 'JuamCOL' };
   const esAdmin = () => uIn.value.trim().toLowerCase() === ADMIN.user && pIn.value.trim().toLowerCase() === ADMIN.rol;
   async function entrarAdmin() {
     btn.disabled = true; uIn.readOnly = pIn.readOnly = true;
@@ -536,6 +591,107 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && secEl.classList.contains('show')) $('secNo').click(); });
 
+  /* ---------- Curso (Estudiante) ----------
+     Solo cuentan los nombres. Agrega o quita nombres de cada curso aquí. */
+  const CURSOS = {
+    '10 A': ['Alfonso Ariza', 'Alejandra Henao', 'Alejandra Rios', 'Alejandro Rodriguez', 'Danna Paola', 'Juan Maldonado', 'Diego Rodriguez',
+      'Esteban Toro', 'Fabian Florez', 'Heidy Galvan', 'Juan David Pedrozo', 'Juan Pablo Solano', 'Marcos Lara', 'Maria Isabel Gallego',
+      'Maria Sofia Barrera', 'Nigel Saavedra', 'Sarah Luciana Barajas', 'Angel Trespalacios', 'Sarah Maria Bermudez'],
+    '10 B': ['Alejandro Gomez', 'Isabella Hernandez', 'Juliana', 'Camila Prada', 'David Suarez', 'Emily Centeno', 'Frank Ricuarte', 'Heilyn Moreno',
+      'Viancy Moreno', 'Isabella Saavedra', 'Jesus Cuellar', 'Jireth Gomez', 'Juan Jose Castro', 'Alejandra Restrepo', 'Maria Juliana Gil',
+      'Mateo Florez', 'Nicole Rodriguez', 'Susan Reyes', 'Yelsi Lorena'],
+    '10 C': ['Michelle Jaraba', 'Gabriela Carvajal', 'Nicolle Castro', 'Luis Correa', 'Nicolas Cruz', 'Ian Daza', 'Juan Jose Daza', 'Leyna Duran',
+      'Flor Echeverria', 'Maria Camila Salgado', 'Juanita Gomez', 'Luisa Gomez', 'Danna Hernandez', 'Allan Zabaleta', 'Izabella Pabon',
+      'Juan Camilo Oquendo', 'Julian Ortiz', 'Said Pedrozo', 'Valeria Rincon'],
+    '11 A': ['Adriana Serrano', 'Daniel Cardenas', 'Dylan Galvis', 'John Mellan', 'Juan Angulo', 'Juan Pacheco', 'Juliana De la Cruz', 'Maria Florez',
+      'Maria Rueda', 'Maria Mulet', 'Natalie Salas', 'Nicolas Ulloa', 'Salome Quiroga', 'Sebastian Mayorca', 'Sol Parra', 'Sophi Lara',
+      'Wendy Arevalo', 'Manuel Duarte'],
+    '11 B': ['Anny Macias', 'Belen Pertuz', 'Brayan Rangel', 'Daniel Merchan', 'Efrain Guiza', 'Jhosept Fonseca', 'Johana Ochoa', 'Jorgeth Monsalve',
+      'Joshuad Rodriguez', 'Juan Pinto', 'Juan Lopez', 'Juan Parra', 'Karina Perez', 'Luciana Paba', 'Luis Rey', 'Sara Pertuz', 'Shayrick Guzman',
+      'Jorge Gelvez'],
+    '11 C': ['Angel Castro', 'Asley Aceros', 'Camilo Ariza', 'Camilo Suarez', 'Cesar Joya', 'Daira Florez', 'Edinson Cristancho', 'Gabriela Salas',
+      'Isabella Cano', 'Jhon Sosa', 'Jorge Sosa', 'Juan Rodriguez', 'Juan Porras', 'Juan Arroyo', 'Juan Fuentes', 'Manuel Castellanos', 'Juana Marin',
+      'Maria Miranda']
+  };
+  /* false = vale escribir nombre, apellido o ambos (en orden) · true = hay que escribir el nombre completo tal cual */
+  const EXIGIR_NOMBRE_COMPLETO = false;
+  function esEstudiante(nombre, curso) {
+    const t = palabras(nombre);
+    if (CONECTORES.includes(t[0]) || CONECTORES.includes(t[t.length - 1])) return false;
+    return (CURSOS[curso] || []).some(d => {
+      const dt = palabras(d);
+      if (EXIGIR_NOMBRE_COMPLETO) return dt.join(' ') === t.join(' ');
+      let i = 0;
+      for (const w of t) { i = dt.indexOf(w, i); if (i < 0) return false; i++; }
+      return true;
+    });
+  }
+  async function registrarEstudiante() {
+    btn.disabled = true; uIn.readOnly = pIn.readOnly = true; $('curso').disabled = true;
+    btn.classList.add('checking');
+    await sleep(30);
+    const pasos = ['Registrando estudiante…', 'Verificando curso…', 'Preparando tu espacio…'];
+    for (let i = 0; i < pasos.length; i++) {
+      setLabel(pasos[i]); btn.style.setProperty('--p', ((i + 1) * 33.4) + '%'); await sleep(950);
+    }
+    const ok = esEstudiante(uIn.value, $('curso').value);
+    btn.classList.remove('checking'); btn.style.removeProperty('--p');
+    if (ok) { btn.classList.add('verified'); setLabel('Estudiante registrado ✓'); await sleep(900); return true; }
+    btn.classList.add('denied'); setLabel('No se pudo registrar');
+    plant.setAttribute('class', 'plant s1'); $('barfill').style.width = '50%';
+    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en el curso ' + $('curso').value + '. Revisa cómo lo escribiste o el curso elegido.' }, true);
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    await sleep(1800);
+    btn.classList.remove('denied'); setLabel('Ingresar');
+    btn.disabled = false; uIn.readOnly = pIn.readOnly = false; $('curso').disabled = false; uIn.focus();
+    return false;
+  }
+  $('curso').addEventListener('change', () => {
+    const c = $('curso'); c.classList.toggle('ok', c.value !== '');
+    $('hc').className = 'hint'; $('hc').textContent = 'Elige el curso al que perteneces.';
+    update();
+  });
+
+  /* ---------- PIN del docente (aleatorio, se muestra 5 segundos en una nube) ---------- */
+  let pinActual = '', pinVisible = false, nubeT = null;
+  const nube = $('nube'), pinIn = $('pin');
+  function mostrar(box, on) { box.classList.toggle('show', on); box.inert = !on; box.setAttribute('aria-hidden', on ? 'false' : 'true'); }
+  function genPin() {
+    const n = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint32Array(1))[0] % 10000 : Math.floor(Math.random() * 10000);
+    return String(n).padStart(4, '0');
+  }
+  function verNube() {
+    clearTimeout(nubeT);
+    $('nubePin').textContent = pinActual;
+    nube.classList.remove('show'); void nube.offsetWidth; nube.classList.add('show');
+    nubeT = setTimeout(() => nube.classList.remove('show'), 5000);
+  }
+  function nuevoPin(esperar) {
+    pinActual = genPin(); pinIn.value = ''; pinIn.classList.remove('ok', 'bad');
+    $('hpin').className = 'hint'; $('hpin').textContent = 'Escribe el PIN que aparece en la nube.';
+    clearTimeout(nubeT);
+    if (esperar) nubeT = setTimeout(verNube, 600); else verNube();
+  }
+  function resetPin() {
+    clearTimeout(nubeT); nube.classList.remove('show');
+    pinActual = ''; pinIn.value = ''; pinIn.classList.remove('ok', 'bad');
+  }
+  pinIn.addEventListener('input', () => {
+    pinIn.value = pinIn.value.replace(/\D/g, '').slice(0, 4);
+    const h = $('hpin');
+    if (pinIn.value.length === 4) {
+      const ok = pinIn.value === pinActual;
+      pinIn.classList.toggle('ok', ok); pinIn.classList.toggle('bad', !ok);
+      h.className = 'hint ' + (ok ? 'ok' : 'bad');
+      h.textContent = ok ? 'PIN correcto.' : 'PIN incorrecto. Revisa la nube o pide uno nuevo.';
+    } else {
+      pinIn.classList.remove('ok', 'bad'); h.className = 'hint'; h.textContent = 'Escribe el PIN que aparece en la nube.';
+    }
+    update();
+  });
+  $('repin').addEventListener('click', () => { nuevoPin(false); update(); pinIn.focus(); });
+  function extraRol() { return tipoSel() || (pIn.value.trim() === 'Estudiante' ? $('curso').value : ''); }
+
   /* ---------- Tipo de visitante ---------- */
   function tipoSel() {
     if (pIn.value.trim() !== 'Visitante') return '';
@@ -556,18 +712,29 @@
     if (!all) {
       paint(uIn, hu, ru, true); paint(pIn, hp, rp, true);
       card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-      if (ru.ok && rp.ok) { errTipo(); document.querySelector('input[name=tipo]').focus(); }
+      if (ru.ok && rp.ok) {
+        const r = pIn.value.trim();
+        if (r === 'Estudiante') {
+          $('hc').className = 'hint bad'; $('hc').textContent = 'Selecciona tu curso para continuar.';
+          $('curso').classList.add('bad'); $('curso').focus();
+        } else if (r === 'Docente') {
+          $('hpin').className = 'hint bad';
+          $('hpin').textContent = pinIn.value.length === 4 ? 'PIN incorrecto. Revisa la nube o pide uno nuevo.' : 'Escribe el PIN de 4 dígitos que aparece en la nube.';
+          pinIn.classList.add('bad'); pinIn.focus();
+        } else { errTipo(); document.querySelector('input[name=tipo]').focus(); }
+      }
       else (ru.ok ? pIn : uIn).focus();
       return;
     }
     if (pIn.value.trim() === 'Docente' && !(await verificarDocente())) return;
+    if (pIn.value.trim() === 'Estudiante' && !(await registrarEstudiante())) return;
     btn.disabled = true;
     try {
       sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: pIn.value.trim(), tipo: tipoSel() }));
       sessionStorage.setItem('sesionActiva', 'true');   // <-- NUEVO: marca de sesión para auth.js
     } catch (err) {}
     $('wtitle').textContent = 'Bienvenido(a), ' + uIn.value.trim();
-    $('wsub').textContent = 'Ingresando como ' + pIn.value.trim() + (tipoSel() ? ' (' + tipoSel() + ')' : '') + ' a Infantas Web - Blog';
+    $('wsub').textContent = 'Ingresando como ' + pIn.value.trim() + (extraRol() ? ' (' + extraRol() + ')' : '') + ' a Infantas Web - Blog';
     $('welcome').classList.add('show');
     setTimeout(() => { window.location.href = './home.html'; }, 3000);
   });

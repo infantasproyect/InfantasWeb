@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html class="wide wow-animation" lang="en">
   <head>
+    <!-- Guardia de sesión: debe ir lo más arriba posible -->
+    <script src="./js/auth.js"></script>
     <title>Infantas Web - Home</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -51,7 +53,7 @@
                         <li class="rd-nav-item"><a class="rd-nav-link" href="./busqueda-manual.html">Busqueda manual</a></li>
                         <li class="rd-nav-item"><a class="rd-nav-link" href="./actualizaciones.html">Actualizaciones</a></li>
                         <li class="rd-nav-item"><a class="rd-nav-link" href="./desarrollo.html">Desarrollo Web</a></li>
-                        <li class="rd-nav-item"><a class="rd-nav-link" href="./index.html">Log Out</a></li>
+                        <li class="rd-nav-item"><a class="rd-nav-link" href="./index.html" onclick="cerrarSesion(); return false;">Log Out</a></li>
                       </ul>
                     </div>
                   </div>

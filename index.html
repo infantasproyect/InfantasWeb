@@ -472,6 +472,7 @@
     btn.classList.remove('checking'); btn.classList.add('verified'); setLabel('Acceso concedido ✓');
     try {
       sessionStorage.setItem('admin', '1');
+      sessionStorage.setItem('sesionActiva', 'true');   // <-- NUEVO: marca de sesión para auth.js
       sessionStorage.setItem('usuario', JSON.stringify({ nombre: ADMIN.nombre, rol: 'Admin', tipo: '' }));
     } catch (err) {}
     await sleep(600);
@@ -561,7 +562,10 @@
     }
     if (pIn.value.trim() === 'Docente' && !(await verificarDocente())) return;
     btn.disabled = true;
-    try { sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: pIn.value.trim(), tipo: tipoSel() })); } catch (err) {}
+    try {
+      sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: pIn.value.trim(), tipo: tipoSel() }));
+      sessionStorage.setItem('sesionActiva', 'true');   // <-- NUEVO: marca de sesión para auth.js
+    } catch (err) {}
     $('wtitle').textContent = 'Bienvenido(a), ' + uIn.value.trim();
     $('wsub').textContent = 'Ingresando como ' + pIn.value.trim() + (tipoSel() ? ' (' + tipoSel() + ')' : '') + ' a Infantas Web - Blog';
     $('welcome').classList.add('show');

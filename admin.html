@@ -76,6 +76,18 @@ main{flex:1;min-width:0;overflow:auto;padding:26px 30px 50px}
 .fc p{color:var(--mut);font-size:.9rem}
 .fc .acts{display:flex;gap:8px;margin-top:auto}
 .fc .acts>*{flex:1;text-align:center;text-decoration:none;font-size:.9rem;padding:9px}
+.fold .fh{width:100%;font-weight:600;color:var(--tx)}
+.fold .fh .cr{display:inline-block;transition:transform .2s}
+.fold.shut .cr{transform:rotate(-90deg)}
+.fold .fh small{margin-left:auto;color:var(--mut);font-weight:400}
+.kids{margin:0 0 6px 16px;padding-left:6px;border-left:1px solid var(--bd);display:flex;flex-direction:column;gap:2px}
+.fold.shut .kids{display:none}
+.tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.tree h4{font-size:.92rem;margin-bottom:6px}
+.tree button{display:flex;width:100%;gap:8px;background:none;border:0;border-radius:6px;padding:5px 6px;cursor:pointer;text-align:left;font-family:"JetBrains Mono",monospace;font-size:.8rem}
+.tree button:hover{background:color-mix(in srgb,var(--a) 14%,transparent)}
+.tree button span:last-child{margin-left:auto;color:var(--mut)}
+.ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}.ch h3{margin:0}.ch .seg{margin-left:auto}
 .viewer .meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
 .viewer .meta span{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:5px 10px;font-size:.85rem}
 .box{display:flex;max-height:calc(100vh - 230px);overflow:auto;border:1px solid var(--bd);border-radius:var(--r);background:var(--code);font-family:"JetBrains Mono",monospace;font-size:var(--cs);line-height:1.6}
@@ -120,7 +132,7 @@ input[type=range]{accent-color:var(--a)}
     <button data-v="files">🔗 Accesos directos</button>
     <button data-v="set">⚙️ Configuración</button>
   </nav>
-  <nav class="nav" id="nav2"><h4>Código por página (PIN)</h4></nav>
+  <nav class="nav" id="nav2"><h4>Estructura y código (PIN)</h4></nav>
   <div class="me"><span class="av">A</span><div>Administrador<small>Sesión activa</small></div><button class="out" id="out">Salir</button></div>
 </aside>
 
@@ -135,31 +147,32 @@ input[type=range]{accent-color:var(--a)}
   <!-- DASHBOARD -->
   <section id="v-dash">
     <div class="kpis">
-      <div class="card kpi"><h3>Páginas</h3><b id="k1">0</b><span id="k1s">en el sitio</span></div>
+      <div class="card kpi"><h3>Archivos</h3><b id="k1">0</b><span id="k1s">en el sitio</span></div>
       <div class="card kpi"><h3>Líneas de código</h3><b id="k2">—</b><span>sumando todas las páginas</span></div>
       <div class="card kpi"><h3>Peso total</h3><b id="k3">—</b><span>en KB</span></div>
       <div class="card kpi"><h3>Hora</h3><b id="k4">--:--:--</b><span><i style="color:var(--ok)">●</i> En línea · <span id="date"></span></span></div>
     </div>
     <div class="cols">
-      <div class="card"><h3>Líneas de código por página</h3><div class="bars" id="bars"></div></div>
-      <div class="card"><h3>Líneas por categoría</h3><div class="donut"><svg id="dn" width="150" height="150" viewBox="0 0 42 42"></svg><div class="leg" id="leg"></div></div></div>
+      <div class="card"><div class="ch"><h3 id="bt">Líneas de código por archivo</h3><div class="seg" id="sMet"><button data-m="l" class="on">Líneas</button><button data-m="kb">Peso (KB)</button></div></div><div class="bars" id="bars"></div></div>
+      <div class="card"><h3 id="dt">Líneas por categoría</h3><div class="donut"><svg id="dn" width="150" height="150" viewBox="0 0 42 42"></svg><div class="leg" id="leg"></div></div></div>
     </div>
     <div class="cols">
-      <div class="card"><h3>Las 5 con más líneas</h3><ol class="rank" id="rank"></ol></div>
+      <div class="card"><h3 id="rt">Los 5 con más líneas</h3><ol class="rank" id="rank"></ol></div>
       <div class="card"><h3>Resumen rápido</h3>
         <div class="row"><label>Más grande</label><b id="r1">—</b></div>
         <div class="row"><label>Más pequeña</label><b id="r2">—</b></div>
         <div class="row"><label>Promedio</label><b id="r3">—</b></div>
-        <div class="row"><label>Grados</label><b id="r4">—</b></div>
+        <div class="row"><label>JS y CSS</label><b id="r4">—</b></div>
         <div class="row"><label>PIN de código</label><b>Activo en las 12 páginas</b></div>
       </div>
     </div>
+    <div class="card"><h3>Estructura del proyecto</h3><div class="tree" id="tree"></div></div>
   </section>
 
   <!-- ACCESOS -->
   <section id="v-files" class="hide">
     <div class="tools"><input id="q" type="search" placeholder="Buscar página o archivo…" aria-label="Buscar" autocomplete="off">
-      <button class="chip on" data-c="Todos">Todos</button><button class="chip" data-c="Principal">Principal</button><button class="chip" data-c="Contenido">Contenido</button><button class="chip" data-c="Grados">Grados</button></div>
+      <button class="chip on" data-c="Todos">Todos</button><button class="chip" data-c="Principal">Principal</button><button class="chip" data-c="Contenido">Contenido</button><button class="chip" data-c="Grados">Grados</button><button class="chip" data-c="JavaScript">JavaScript</button><button class="chip" data-c="CSS">CSS</button></div>
     <div class="grid" id="grid"></div><div class="empty hide" id="empty">Sin resultados. Prueba con otra búsqueda.</div>
   </section>
 
@@ -215,10 +228,21 @@ const FILES=[
  {f:'10c.html',n:'Grado 10-C',c:'Grados',e:'🎓',d:'Blogs del grado 10-C.'},
  {f:'11a.html',n:'Grado 11-A',c:'Grados',e:'🎓',d:'Blogs del grado 11-A.'},
  {f:'11b.html',n:'Grado 11-B',c:'Grados',e:'🎓',d:'Blogs del grado 11-B.'},
- {f:'11c.html',n:'Grado 11-C',c:'Grados',e:'🎓',d:'Blogs del grado 11-C.'}
+ {f:'11c.html',n:'Grado 11-C',c:'Grados',e:'🎓',d:'Blogs del grado 11-C.'},
+ {f:'js/auth.js',n:'Autenticación',c:'JavaScript',e:'🛡️',d:'Valida la sesión activa en cada página.'},
+ {f:'js/saludo.js',n:'Saludo de usuario',c:'JavaScript',e:'👋',d:'Muestra el saludo y el rol en la esquina.'},
+ {f:'js/script.js',n:'Script principal',c:'JavaScript',e:'⚙️',d:'Lógica general del sitio.'},
+ {f:'js/core.min.js',n:'Núcleo (minificado)',c:'JavaScript',e:'🧩',d:'Librería base en una versión comprimida.'},
+ {f:'css/bootstrap.css',n:'Bootstrap',c:'CSS',e:'🧱',d:'Framework de estilos base.'},
+ {f:'css/fonts.css',n:'Fuentes',c:'CSS',e:'🔤',d:'Definición de las tipografías.'},
+ {f:'css/style.css',n:'Estilos principales',c:'CSS',e:'🎨',d:'Hoja de estilos del sitio.'},
+ {f:'css/style2.css',n:'Estilos del login',c:'CSS',e:'🔐',d:'Diseño de la pantalla de acceso.'},
+ {f:'css/style3.css',n:'Estilos 3',c:'CSS',e:'🎨',d:'Hoja de estilos adicional.'}
 ];
+const HTML=it=>/\.html$/.test(it.f), FOLDERS=[['','raíz (HTML)'],['js','js'],['css','css']];
+const dir=it=>it.f.includes('/')?it.f.split('/')[0]:'';
 const PIN='2552', $=id=>document.getElementById(id), data={};
-const CAT={Principal:'#c026f0',Contenido:'#2ea8ff',Grados:'#2fd18b'};
+const CAT={Principal:'#c026f0',Contenido:'#2ea8ff',Grados:'#2fd18b',JavaScript:'#f5b301',CSS:'#ff6b9a'};
 const THEMES={Violeta:['#c026f0','#2ea8ff'],Océano:['#0ea5e9','#22d3ee'],Bosque:['#16a34a','#84cc16'],Atardecer:['#f97316','#ec4899'],Rubí:['#e11d48','#f59e0b'],Índigo:['#6366f1','#a855f7']};
 const FONTS={'Space Grotesk':'"Space Grotesk",system-ui,sans-serif','Inter':'Inter,system-ui,sans-serif','Poppins':'Poppins,system-ui,sans-serif','Merriweather (serif)':'Merriweather,Georgia,serif','Sistema':'system-ui,-apple-system,"Segoe UI",sans-serif','Monoespaciada':'"JetBrains Mono",monospace'};
 const DEF={mode:'dark',theme:'Violeta',a:'#c026f0',b:'#2ea8ff',font:'Space Grotesk',fs:15,cs:12.5,r:14,anim:1};
@@ -266,9 +290,16 @@ function show(v,f){
   $('side').classList.remove('open');
 }
 document.querySelectorAll('#nav1 button').forEach(b=>b.onclick=()=>show(b.dataset.v));
-FILES.forEach(it=>{const b=document.createElement('button');b.dataset.v='code';b.dataset.f=it.f;
-  b.innerHTML='<span>'+it.e+'</span><span class="fn"></span><span class="lk">🔒</span>';b.querySelector('.fn').textContent=it.f;
-  b.onclick=()=>openCode(it.f);$('nav2').appendChild(b)});
+FOLDERS.forEach(([d,lbl])=>{
+  const list=FILES.filter(it=>dir(it)===d),box=document.createElement('div');box.className='fold';
+  box.innerHTML='<button class="fh"><span class="cr">▾</span><span>📁</span><span class="fn"></span><small></small></button><div class="kids"></div>';
+  box.querySelector('.fn').textContent=lbl+'/';box.querySelector('small').textContent=list.length;
+  box.querySelector('.fh').onclick=()=>box.classList.toggle('shut');
+  list.forEach(it=>{const b=document.createElement('button');b.dataset.v='code';b.dataset.f=it.f;
+    b.innerHTML='<span>'+it.e+'</span><span class="fn"></span><span class="lk">🔒</span>';b.querySelector('.fn').textContent=it.f.split('/').pop();
+    b.onclick=()=>openCode(it.f);box.querySelector('.kids').appendChild(b)});
+  $('nav2').appendChild(box);
+});
 $('burger').onclick=()=>$('side').classList.toggle('open');
 $('out').onclick=()=>{try{sessionStorage.clear()}catch(e){}location.href='./index.html'};
 
@@ -295,12 +326,12 @@ async function getText(f){
 }
 async function showCode(f){
   show('code',f);const it=FILES.find(x=>x.f===f);
-  $('src').textContent='Cargando…';$('ln').textContent='';$('cmeta').innerHTML='';
+  $('src').textContent='Cargando… (los archivos grandes tardan un poco)';$('ln').textContent='';$('cmeta').innerHTML='';
   try{const t=await getText(f),d=data[f];
     $('ln').textContent=Array.from({length:d.l},(_,i)=>i+1).join('\n');$('src').textContent=t;
     const m=[it.c,fmt(d.l)+' líneas',d.kb.toFixed(1)+' KB','Solo lectura'];
     m.forEach(x=>{const s=document.createElement('span');s.textContent=x;$('cmeta').appendChild(s)});
-    const a=document.createElement('a');a.className='btn';a.style.textDecoration='none';a.href='./'+f;a.onclick=sesion;a.textContent='Abrir página';$('cmeta').appendChild(a);
+    if(HTML(it)){const a=document.createElement('a');a.className='btn';a.style.textDecoration='none';a.href='./'+f;a.onclick=sesion;a.textContent='Abrir página';$('cmeta').appendChild(a)}
   }catch(e){$('src').textContent='No se pudo cargar '+f+'.\nComprueba que el archivo exista en la misma carpeta y abre el sitio desde tu hosting: en archivos locales el navegador bloquea esta lectura.'}
 }
 
@@ -310,7 +341,7 @@ FILES.forEach(it=>{
   const el=document.createElement('article');el.className='card fc';el.dataset.c=it.c;el.dataset.s=(it.n+' '+it.f).toLowerCase();
   el.innerHTML='<div class="h"><span class="ico"></span><div><h3></h3><code></code></div></div><p></p><div class="acts"><a class="btn">Abrir</a><button class="btn ghost">🔒 Ver código</button></div>';
   el.querySelector('.ico').textContent=it.e;el.querySelector('h3').textContent=it.n;el.querySelector('code').textContent=it.f;el.querySelector('p').textContent=it.d;
-  const lnk=el.querySelector('a');lnk.href='./'+it.f;lnk.onclick=sesion;el.querySelector('button').onclick=()=>openCode(it.f);$('grid').appendChild(el);
+  const lnk=el.querySelector('a');lnk.href='./'+it.f;lnk.onclick=sesion;if(!HTML(it))lnk.remove();el.querySelector('button').onclick=()=>openCode(it.f);$('grid').appendChild(el);
 });
 function filtrar(){const q=$('q').value.trim().toLowerCase();let n=0;
   $('grid').querySelectorAll('.card').forEach(c=>{const ok=(cat==='Todos'||c.dataset.c===cat)&&c.dataset.s.includes(q);c.classList.toggle('hide',!ok);if(ok)n++});
@@ -319,38 +350,56 @@ $('q').oninput=filtrar;
 document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;filtrar()});
 
 /* ---------- Estadísticas ---------- */
-function bar(it,max){
-  const d=document.createElement('div');d.className='bar';d.title='Ver código de '+it.f;
-  d.innerHTML='<span class="nm"></span><div class="tr"><div class="fill"></div></div><em></em>';
-  d.querySelector('.nm').textContent=it.n;d.querySelector('em').textContent=fmt(data[it.f].l);
-  d.onclick=()=>openCode(it.f);$('bars').appendChild(d);
-  requestAnimationFrame(()=>requestAnimationFrame(()=>d.querySelector('.fill').style.width=Math.max(3,data[it.f].l/max*100)+'%'));
-}
+let M='l',OK=[];
+const val=it=>M==='l'?data[it.f].l:data[it.f].kb;
+const vtxt=it=>data[it.f]?(M==='l'?fmt(data[it.f].l):data[it.f].kb.toFixed(1)+' KB'):'—';
 async function stats(){
-  $('bars').innerHTML='<div class="empty">Calculando líneas…</div>';
-  const ok=[];
-  await Promise.all(FILES.map(async it=>{try{await getText(it.f);ok.push(it)}catch(e){}}));
+  $('bars').innerHTML='<div class="empty">Calculando…</div>';OK=[];
+  await Promise.all(FILES.map(async it=>{try{await getText(it.f);OK.push(it)}catch(e){}}));
+  draw();
+}
+function draw(){
+  const n=(c)=>FILES.filter(i=>i.c===c).length,h=FILES.filter(HTML).length;
+  $('k1s').textContent=h+' HTML · '+FILES.filter(i=>i.c==='JavaScript').length+' JS · '+FILES.filter(i=>i.c==='CSS').length+' CSS';
+  buildTree();
   $('bars').innerHTML='';
-  if(!ok.length){$('bars').innerHTML='<div class="empty">No se pudieron leer las páginas. Abre el panel desde tu hosting para ver las estadísticas.</div>';$('k2').textContent=$('k3').textContent='—';return}
-  ok.sort((a,b)=>data[b.f].l-data[a.f].l);
-  const tot=ok.reduce((s,i)=>s+data[i.f].l,0),kb=ok.reduce((s,i)=>s+data[i.f].kb,0),max=data[ok[0].f].l;
-  $('k2').textContent=fmt(tot);$('k3').textContent=kb.toFixed(1);$('k1s').textContent=ok.length+' leídas de '+FILES.length;
-  ok.forEach(it=>bar(it,max));
-  const by={};ok.forEach(i=>by[i.c]=(by[i.c]||0)+data[i.f].l);
+  if(!OK.length){$('bars').innerHTML='<div class="empty">No se pudieron leer los archivos. Abre el panel desde tu hosting para ver las estadísticas.</div>';$('k2').textContent=$('k3').textContent='—';return}
+  const ok=OK.slice().sort((x,y)=>val(y)-val(x)),tot=ok.reduce((t,i)=>t+val(i),0),max=val(ok[0]);
+  $('k2').textContent=fmt(OK.reduce((t,i)=>t+data[i.f].l,0));$('k3').textContent=OK.reduce((t,i)=>t+data[i.f].kb,0).toFixed(1);
+  const u=M==='l'?'líneas':'KB';
+  $('bt').textContent=(M==='l'?'Líneas de código':'Peso')+' por archivo';$('dt').textContent=(M==='l'?'Líneas':'Peso')+' por categoría';$('rt').textContent='Los 5 con más '+(M==='l'?'líneas':'peso');
+  ok.forEach(it=>{
+    const d=document.createElement('div');d.className='bar';d.title='Ver código de '+it.f;
+    d.innerHTML='<span class="nm"></span><div class="tr"><div class="fill"></div></div><em></em>';
+    d.querySelector('.nm').textContent=it.f.split('/').pop();d.querySelector('em').textContent=vtxt(it);
+    d.onclick=()=>openCode(it.f);$('bars').appendChild(d);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>d.querySelector('.fill').style.width=Math.max(2,val(it)/max*100)+'%'));
+  });
+  const by={};ok.forEach(i=>by[i.c]=(by[i.c]||0)+val(i));
   let off=0;$('dn').innerHTML='<circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--bd)" stroke-width="5"/>';$('leg').innerHTML='';
   Object.entries(by).forEach(([c,v])=>{const p=v/tot*100;
     $('dn').insertAdjacentHTML('beforeend','<circle cx="21" cy="21" r="15.9" fill="none" stroke="'+CAT[c]+'" stroke-width="5" stroke-dasharray="'+p+' '+(100-p)+'" stroke-dashoffset="'+(25-off)+'"/>');off+=p;
-    const l=document.createElement('div');l.innerHTML='<i style="background:'+CAT[c]+'"></i><span></span>';l.querySelector('span').textContent=c+' · '+fmt(v)+' ('+p.toFixed(0)+'%)';$('leg').appendChild(l)});
+    const l=document.createElement('div');l.innerHTML='<i style="background:'+CAT[c]+'"></i><span></span>';l.querySelector('span').textContent=c+' · '+(M==='l'?fmt(v):v.toFixed(1)+' KB')+' ('+p.toFixed(0)+'%)';$('leg').appendChild(l)});
   $('rank').innerHTML='';
-  ok.slice(0,5).forEach((it,i)=>{const li=document.createElement('li');li.innerHTML='<span></span><b></b>';li.querySelector('span').textContent=(i+1)+'. '+it.n;li.querySelector('b').textContent=fmt(data[it.f].l);li.onclick=()=>openCode(it.f);$('rank').appendChild(li)});
-  const last=ok[ok.length-1];
-  $('r1').textContent=ok[0].n+' · '+fmt(data[ok[0].f].l);$('r2').textContent=last.n+' · '+fmt(data[last.f].l);
-  $('r3').textContent=fmt(Math.round(tot/ok.length))+' líneas';$('r4').textContent=fmt(ok.filter(i=>i.c==='Grados').reduce((s,i)=>s+data[i.f].l,0))+' líneas';
+  ok.slice(0,5).forEach((it,i)=>{const li=document.createElement('li');li.innerHTML='<span></span><b></b>';li.querySelector('span').textContent=(i+1)+'. '+it.f;li.querySelector('b').textContent=vtxt(it);li.onclick=()=>openCode(it.f);$('rank').appendChild(li)});
+  const last=ok[ok.length-1],sum=a=>a.reduce((t,i)=>t+val(i),0),tx=v=>M==='l'?fmt(Math.round(v)):v.toFixed(1)+' KB';
+  $('r1').textContent=ok[0].f+' · '+vtxt(ok[0]);$('r2').textContent=last.f+' · '+vtxt(last);
+  $('r3').textContent=tx(tot/ok.length)+(M==='l'?' líneas':'');$('r4').textContent=tx(sum(ok.filter(i=>i.c==='JavaScript'||i.c==='CSS')))+(M==='l'?' líneas':'');
 }
+function buildTree(){
+  $('tree').innerHTML='';
+  FOLDERS.forEach(([d,lbl])=>{
+    const c=document.createElement('div'),h=document.createElement('h4');h.textContent='📁 '+lbl+'/';c.appendChild(h);
+    FILES.filter(it=>dir(it)===d).forEach(it=>{const b=document.createElement('button');b.innerHTML='<span>'+it.e+'</span><span></span><span></span>';
+      b.children[1].textContent=it.f.split('/').pop();b.children[2].textContent=vtxt(it);b.onclick=()=>openCode(it.f);c.appendChild(b)});
+    $('tree').appendChild(c);
+  });
+}
+$('sMet').onclick=e=>{if(e.target.dataset.m&&e.target.dataset.m!==M){M=e.target.dataset.m;document.querySelectorAll('#sMet button').forEach(b=>b.classList.toggle('on',b.dataset.m===M));draw()}};
 $('reload').onclick=()=>{FILES.forEach(f=>delete data[f.f]);stats()};
 
 /* ---------- Reloj ---------- */
-$('k1').textContent=FILES.length;
+$('k1').textContent=FILES.length;buildTree();
 const tick=()=>{const d=new Date();$('k4').textContent=d.toLocaleTimeString('es-CO',{hour12:false});$('date').textContent=d.toLocaleDateString('es-CO',{day:'numeric',month:'short'})};
 tick();setInterval(tick,1000);
 apply();show('dash');filtrar();stats();

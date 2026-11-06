@@ -184,6 +184,17 @@
   .lock-time{position:absolute;left:0;right:0;top:94px;font-family:"Fraunces",Georgia,serif;font-size:2.6rem;font-weight:700;font-variant-numeric:tabular-nums}
   .lock h3{font-family:"Fraunces",Georgia,serif;font-size:1.45rem;margin:18px 0 6px}
   .lock p{color:#e8c9c3;font-size:.93rem;line-height:1.5}
+  .lock.profundo{background:#000;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .lock.profundo .lock-card{background:#040404;border-color:rgba(255,255,255,.1);box-shadow:none}
+  .lock.profundo.show .lock-ring{animation:none}
+  .lock.profundo .lock-ring .bg{stroke:rgba(255,255,255,.07)}
+  .lock.profundo .lock-ring .fg{stroke:#555;filter:none}
+  .lock.profundo .lock-time{color:#bdbdbd}
+  .lock.profundo h3{color:#cfcfcf}
+  .lock.profundo p{color:#7a7a7a}
+  .apin-dots{display:flex;justify-content:center;gap:8px;margin:2px 0 8px}
+  .apin-dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .4s cubic-bezier(.3,1.6,.5,1)}
+  .apin-dots i.on{background:#f107a3;box-shadow:0 0 12px #f107a3;transform:scale(1.3)}
 
   button{position:relative;overflow:hidden;width:100%;font:inherit;font-weight:700;font-size:1.02rem;color:var(--deep);background:#cfe0c4;border:0;border-radius:12px;padding:14px;cursor:pointer;transition:background .4s,color .4s,transform .15s,box-shadow .3s}
   button.ready{background:var(--forest);color:#fff;box-shadow:0 10px 22px rgba(31,77,46,.28)}
@@ -293,7 +304,7 @@
             </div>
             <div class="field rise" style="--i:2">
               <label for="p">Rol</label>
-              <input type="text" id="p" name="p" placeholder="Docente, Estudiante, Visitante…" maxlength="14" aria-describedby="hp" required>
+              <input type="text" id="p" name="p" placeholder="Docente, Estudiante, Visitante....." maxlength="14" aria-describedby="hp" required>
               <div class="hint" id="hp" aria-live="polite">Escríbelo tal cual: Docente, Estudiante, Visitante, Auxiliar o Administrativo.</div>
               <div class="chips" aria-hidden="true"><span class="chip est" data-r="Estudiante">Estudiante</span><span class="chip doc" data-r="Docente">Docente</span><span class="chip vis" data-r="Visitante">Visitante</span><span class="chip aux" data-r="Auxiliar">Auxiliar</span><span class="chip adv" data-r="Administrativo">Administrativo</span></div>
             </div>
@@ -333,12 +344,24 @@
     </section>
   </div>
 
+  <div class="sec" id="apinm" role="dialog" aria-modal="true" aria-labelledby="apinT" aria-hidden="true">
+    <form class="sec-card" id="apinForm" autocomplete="off" novalidate>
+      <div class="sec-ico" aria-hidden="true">🔑</div>
+      <h3 id="apinT">PIN de seguridad</h3>
+      <div class="apin-dots" id="apinDots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="sec-sub">Ingresa tu PIN de 4 dígitos.</p>
+      <input type="password" id="apin" class="pin-in" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••" aria-label="PIN de 4 dígitos">
+      <div class="sec-msg" id="apinMsg" aria-live="polite"></div>
+      <div class="sec-acts"><button type="button" class="sec-cancel" id="apinNo">Cancelar</button><button type="submit" class="sec-go">Continuar</button></div>
+    </form>
+  </div>
+
   <div class="lock" id="lock" role="alertdialog" aria-modal="true" aria-labelledby="lockT" aria-hidden="true">
     <div class="lock-card">
       <svg class="lock-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="lockArc" cx="60" cy="60" r="52"/></svg>
       <div class="lock-time" id="lockTime" aria-live="off">2:00</div>
       <h3 id="lockT">🔒 Acceso bloqueado</h3>
-      <p>Hubo 3 intentos fallidos. Por seguridad, el ingreso se desbloqueará solo cuando termine el tiempo.</p>
+      <p id="lockMsg">Hubo 3 intentos fallidos. Por seguridad, el ingreso se desbloqueará solo cuando termine el tiempo.</p>
     </div>
   </div>
 
@@ -563,6 +586,12 @@
     for (let i = 0; i < pasos.length; i++) {
       setLabel(pasos[i]); btn.style.setProperty('--p', ((i + 1) * 33.4) + '%'); await sleep(850);
     }
+    setLabel('Último paso…');
+    if (!(await pedirPin(2))) {                  // PIN 3: justo antes de entrar a admin.html
+      btn.classList.remove('checking', 'adm'); btn.style.removeProperty('--p');
+      setLabel('Ingresar'); btn.disabled = false; uIn.readOnly = pIn.readOnly = false;
+      return;
+    }
     btn.classList.remove('checking'); btn.classList.add('verified'); setLabel('Acceso concedido ✓');
     try {
       sessionStorage.setItem('admin', '1');
@@ -581,6 +610,8 @@
      Para cambiar una, abre la consola del navegador en esta página y ejecuta h53('NuevaRespuesta'); pega el número en SEG. */
   const h53 = (s, seed = 0) => { let a = 0xdeadbeef ^ seed, b = 0x41c6ce57 ^ seed; for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); } a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909); b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909); return 4294967296 * (2097151 & b) + (a >>> 0); };
   const SEG = [4120791596001276, 8252721565375576, 2271514558588381];
+  /* PIN 1, PIN 2 y PIN 3 del admin (en orden). Para cambiar uno: en la consola ejecuta h53('1234') y pega el número aquí. */
+  const PINS_ADMIN = [5283806238459691, 5367414925206410, 2829730809917389];
   const secEl = $('sec'), secForm = $('secForm'), secMsg = $('secMsg'), secGo = $('secGo');
   function pedirSeguridad() {
     return new Promise(resolve => {
@@ -610,6 +641,40 @@
     });
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && secEl.classList.contains('show')) $('secNo').click(); });
+
+  /* ---------- PINs del admin (3 pines, en orden) ----------
+     PIN 1: antes de las preguntas · PIN 2: al terminar las preguntas · PIN 3: justo antes de entrar a admin.html.
+     Un PIN incorrecto = bloqueo de 30 minutos en este dispositivo (si escriben menos de 4 dígitos, solo se avisa). */
+  const pinm = $('apinm'), apinIn = $('apin');
+  apinIn.addEventListener('input', () => { apinIn.value = apinIn.value.replace(/\D/g, '').slice(0, 4); });
+  function pedirPin(i) {
+    return new Promise(resolve => {
+      const msg = $('apinMsg'), f = $('apinForm');
+      apinIn.value = ''; msg.className = 'sec-msg'; msg.textContent = '';
+      $('apinT').textContent = 'PIN de seguridad ' + (i + 1) + ' de 3';
+      document.querySelectorAll('#apinDots i').forEach((d, k) => d.classList.toggle('on', k <= i));
+      pinm.classList.add('show'); pinm.setAttribute('aria-hidden', 'false');
+      setTimeout(() => apinIn.focus(), 500);
+      const cerrar = ok => {
+        pinm.classList.remove('show'); pinm.setAttribute('aria-hidden', 'true');
+        f.onsubmit = null; $('apinNo').onclick = null; resolve(ok);
+      };
+      $('apinNo').onclick = () => cerrar(false);
+      f.onsubmit = e => {
+        e.preventDefault();
+        if (apinIn.value.length < 4) { msg.className = 'sec-msg'; msg.textContent = 'Escribe los 4 dígitos.'; return; }
+        if (h53(apinIn.value) === PINS_ADMIN[i]) {
+          msg.className = 'sec-msg ok'; msg.textContent = 'PIN correcto ✓';
+          setTimeout(() => cerrar(true), 450);
+          return;
+        }
+        f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+        cerrar(false);
+        bloquear(ADMIN_LOCK_MS);
+      };
+    });
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && pinm.classList.contains('show')) $('apinNo').click(); });
 
   /* ---------- Curso (Estudiante) ----------
      Solo cuentan los nombres. Agrega o quita nombres de cada curso aquí. */
@@ -726,7 +791,7 @@
 
   /* ---------- Bloqueo: 3 fallos en cualquier rol = 2 minutos sin poder ingresar ----------
      Se guarda en localStorage, así que sigue activo aunque recarguen o cierren la pestaña. */
-  const LOCK_MS = 120000, MAX_FALLOS = 3;
+  const LOCK_MS = 120000, MAX_FALLOS = 3, ADMIN_LOCK_MS = 30 * 60 * 1000;
   const lockEl = $('lock'), lockTime = $('lockTime'), lockArc = $('lockArc');
   let lockT = null;
   const ls = {
@@ -734,30 +799,42 @@
     set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
     del: k => { try { localStorage.removeItem(k); } catch (e) {} }
   };
-  const bloqueoRestante = () => Math.min(LOCK_MS, Math.max(0, (+ls.get('lg_lock') || 0) - Date.now()));
+  const bloqueoRestante = () => Math.min(ADMIN_LOCK_MS, Math.max(0, (+ls.get('lg_lock') || 0) - Date.now()));
   const intento = n => n < MAX_FALLOS ? ' (Intento ' + n + ' de ' + MAX_FALLOS + ')' : '';
   function limpiarFallos() { ls.del('lg_fails'); }
   function fallo() {
     const n = (+ls.get('lg_fails') || 0) + 1;
-    if (n >= MAX_FALLOS) { ls.set('lg_lock', Date.now() + LOCK_MS); ls.set('lg_fails', 0); mostrarBloqueo(); return MAX_FALLOS; }
+    if (n >= MAX_FALLOS) { bloquear(LOCK_MS); return MAX_FALLOS; }
     ls.set('lg_fails', n);
     return n;
   }
+  function bloquear(ms) {
+    ls.set('lg_lock', Date.now() + ms); ls.set('lg_lockms', ms); ls.set('lg_fails', 0);
+    mostrarBloqueo();
+  }
   function mostrarBloqueo() {
     const shell = document.querySelector('.shell');
+    const total = +ls.get('lg_lockms') || LOCK_MS;
+    const profundo = total >= ADMIN_LOCK_MS;                 // bloqueo largo: pantalla negra y el panel no se ve
     shell.inert = true;
+    if (profundo) { shell.style.visibility = 'hidden'; try { sessionStorage.removeItem('admin'); } catch (e) {} }
+    lockEl.style.transition = profundo ? 'none' : '';
+    lockEl.classList.toggle('profundo', profundo);
+    $('lockMsg').textContent = profundo
+      ? 'Acceso bloqueado en este dispositivo. Vuelve a intentarlo cuando termine el tiempo.'
+      : 'Hubo 3 intentos fallidos. Por seguridad, el ingreso se desbloqueará solo cuando termine el tiempo.';
     lockEl.classList.add('show'); lockEl.setAttribute('aria-hidden', 'false');
     clearInterval(lockT);
     const tick = () => {
       const ms = bloqueoRestante();
       if (ms <= 0) {
-        clearInterval(lockT); ls.del('lg_lock'); ls.del('lg_fails');
-        lockEl.classList.remove('show'); lockEl.setAttribute('aria-hidden', 'true'); shell.inert = false;
+        clearInterval(lockT); ls.del('lg_lock'); ls.del('lg_lockms'); ls.del('lg_fails');
+        lockEl.classList.remove('show'); lockEl.setAttribute('aria-hidden', 'true'); shell.inert = false; shell.style.visibility = '';
         return;
       }
       const sg = Math.ceil(ms / 1000);
       lockTime.textContent = Math.floor(sg / 60) + ':' + String(sg % 60).padStart(2, '0');
-      lockArc.style.strokeDashoffset = 326.7 * (1 - ms / LOCK_MS);
+      lockArc.style.strokeDashoffset = 326.7 * (1 - ms / total);
     };
     tick(); lockT = setInterval(tick, 250);
   }
@@ -773,7 +850,14 @@
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
     if (bloqueoRestante() > 0) { mostrarBloqueo(); return; }
-    if (esAdmin()) { if (await pedirSeguridad()) { limpiarFallos(); await entrarAdmin(); } return; }
+    if (esAdmin()) {
+      if (!(await pedirPin(0))) return;          // PIN 1: antes de las preguntas
+      if (!(await pedirSeguridad())) return;     // las 3 preguntas
+      if (!(await pedirPin(1))) return;          // PIN 2: al terminar las preguntas
+      limpiarFallos();
+      await entrarAdmin();                       // PIN 3: va dentro, justo antes de abrir admin.html
+      return;
+    }
     touchedU = touchedP = true;
     const { ru, rp, all } = update();
     if (!all) {

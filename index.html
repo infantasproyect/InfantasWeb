@@ -98,7 +98,7 @@
   .hint.ok{color:var(--ok)}.hint.bad{color:var(--bad)}
   .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
   .chip{font-size:.74rem;font-weight:700;padding:3px 11px;border-radius:999px;border:1.5px solid var(--c);color:var(--c);opacity:.6;transition:all .35s cubic-bezier(.3,1.6,.5,1)}
-  .chip.est{--c:#2f9e5b;--t:#fff}.chip.doc{--c:#2f6fd6;--t:#fff}.chip.vis{--c:#d6403f;--t:#fff}
+  .chip.est{--c:#2f9e5b;--t:#fff}.chip.doc{--c:#2f6fd6;--t:#fff}.chip.vis{--c:#d6403f;--t:#fff}.chip.aux{--c:#e0780c;--t:#fff}.chip.adv{--c:#0e8f9c;--t:#fff}
   .chip.on{background:var(--c);color:var(--t);opacity:1;transform:scale(1.1)}
 
   /* Tipo de visitante (aparece solo con rol Visitante) */
@@ -169,6 +169,21 @@
   .nube.show b{animation:cuenta 5s linear forwards}
   @keyframes flota{50%{transform:translateY(-6px)}}
   @keyframes cuenta{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+  /* Bloqueo por intentos fallidos */
+  .lock{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(179,64,47,.55),rgba(12,22,16,.96));backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+  .lock.show{opacity:1;visibility:visible}
+  .lock-card{position:relative;width:min(100%,420px);padding:34px 28px 28px;border-radius:26px;text-align:center;color:#fff;background:linear-gradient(160deg,#2a1713,#150c0a);border:1px solid rgba(255,107,107,.5);box-shadow:0 0 70px rgba(255,80,80,.28),0 30px 80px rgba(0,0,0,.55);transform:scale(.9) translateY(30px);transition:transform .6s cubic-bezier(.2,1.4,.4,1)}
+  .lock.show .lock-card{transform:none}
+  .lock-ring{width:170px;height:170px;display:block;margin:0 auto;transform:rotate(-90deg);overflow:visible}
+  .lock.show .lock-ring{animation:lpulse 2s ease-in-out infinite}
+  @keyframes lpulse{50%{transform:rotate(-90deg) scale(1.04)}}
+  .lock-ring circle{fill:none;stroke-width:7;stroke-linecap:round}
+  .lock-ring .bg{stroke:rgba(255,255,255,.12)}
+  .lock-ring .fg{stroke:#ff6b6b;stroke-dasharray:326.7;stroke-dashoffset:0;filter:drop-shadow(0 0 8px rgba(255,107,107,.7));transition:stroke-dashoffset .25s linear}
+  .lock-time{position:absolute;left:0;right:0;top:94px;font-family:"Fraunces",Georgia,serif;font-size:2.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+  .lock h3{font-family:"Fraunces",Georgia,serif;font-size:1.45rem;margin:18px 0 6px}
+  .lock p{color:#e8c9c3;font-size:.93rem;line-height:1.5}
 
   button{position:relative;overflow:hidden;width:100%;font:inherit;font-weight:700;font-size:1.02rem;color:var(--deep);background:#cfe0c4;border:0;border-radius:12px;padding:14px;cursor:pointer;transition:background .4s,color .4s,transform .15s,box-shadow .3s}
   button.ready{background:var(--forest);color:#fff;box-shadow:0 10px 22px rgba(31,77,46,.28)}
@@ -278,9 +293,9 @@
             </div>
             <div class="field rise" style="--i:2">
               <label for="p">Rol</label>
-              <input type="text" id="p" name="p" placeholder="Docente, Estudiante o Visitante" maxlength="11" aria-describedby="hp" required>
-              <div class="hint" id="hp" aria-live="polite">Escríbelo tal cual: Docente, Estudiante o Visitante.</div>
-              <div class="chips" aria-hidden="true"><span class="chip est" data-r="Estudiante">Estudiante</span><span class="chip doc" data-r="Docente">Docente</span><span class="chip vis" data-r="Visitante">Visitante</span></div>
+              <input type="text" id="p" name="p" placeholder="Docente, Estudiante, Visitante…" maxlength="14" aria-describedby="hp" required>
+              <div class="hint" id="hp" aria-live="polite">Escríbelo tal cual: Docente, Estudiante, Visitante, Auxiliar o Administrativo.</div>
+              <div class="chips" aria-hidden="true"><span class="chip est" data-r="Estudiante">Estudiante</span><span class="chip doc" data-r="Docente">Docente</span><span class="chip vis" data-r="Visitante">Visitante</span><span class="chip aux" data-r="Auxiliar">Auxiliar</span><span class="chip adv" data-r="Administrativo">Administrativo</span></div>
             </div>
             <div class="tipo-box alto" id="cursoBox" inert aria-hidden="true">
               <label for="curso">Curso</label>
@@ -318,6 +333,15 @@
     </section>
   </div>
 
+  <div class="lock" id="lock" role="alertdialog" aria-modal="true" aria-labelledby="lockT" aria-hidden="true">
+    <div class="lock-card">
+      <svg class="lock-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="lockArc" cx="60" cy="60" r="52"/></svg>
+      <div class="lock-time" id="lockTime" aria-live="off">2:00</div>
+      <h3 id="lockT">🔒 Acceso bloqueado</h3>
+      <p>Hubo 3 intentos fallidos. Por seguridad, el ingreso se desbloqueará solo cuando termine el tiempo.</p>
+    </div>
+  </div>
+
   <div class="sec" id="sec" role="dialog" aria-modal="true" aria-labelledby="secT" aria-hidden="true">
     <form class="sec-card" id="secForm" autocomplete="off" novalidate>
       <div class="sec-ico" aria-hidden="true">🛡️</div>
@@ -346,7 +370,7 @@
 
   /* ================= FILTRO DE NOMBRES =================
      Edita estas listas para agregar o quitar palabras (en minúscula y sin tildes). */
-  const ROLES = ['Docente', 'Estudiante', 'Visitante'];
+  const ROLES = ['Docente', 'Estudiante', 'Visitante', 'Auxiliar', 'Administrativo'];
 
   // Palabras completas: groserías, partes del cuerpo y palabras al azar.
   const BLOCKED_WORDS = [
@@ -403,11 +427,11 @@
   }
   function checkRole(v) {
     v = v.trim();
-    if (!v) return { ok: false, msg: 'Escribe Docente, Estudiante o Visitante.' };
+    if (!v) return { ok: false, msg: 'Escribe Docente, Estudiante, Visitante, Auxiliar o Administrativo.' };
     if (ROLES.includes(v)) return { ok: true, msg: 'Rol válido.' };
     const m = ROLES.find(r => r.toLowerCase() === v.toLowerCase());
     if (m) return { ok: false, msg: 'Casi. Escríbelo tal cual, con mayúscula inicial: ' + m };
-    return { ok: false, msg: 'Solo se acepta Docente, Estudiante o Visitante.' };
+    return { ok: false, msg: 'Solo se acepta Docente, Estudiante, Visitante, Auxiliar o Administrativo.' };
   }
   function paint(input, hint, r, show) {
     input.classList.toggle('ok', show && r.ok);
@@ -421,7 +445,7 @@
       [uIn, pIn].forEach(i => i.classList.remove('ok', 'bad'));
       hu.className = hp.className = 'hint';
       hu.textContent = 'Tu nombre real, empezando con mayúscula.';
-      hp.textContent = 'Escríbelo tal cual: Docente, Estudiante o Visitante.';
+      hp.textContent = 'Escríbelo tal cual: Docente, Estudiante, Visitante, Auxiliar o Administrativo.';
       document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
       $('tipoBox').classList.remove('show'); $('tipoBox').inert = true;
       mostrar($('cursoBox'), false); mostrar($('pinBox'), false); if (pinVisible) { resetPin(); pinVisible = false; }
@@ -441,7 +465,7 @@
     const tipoOk = !esVis || !!tipoSel();
     const rolTxt = pIn.value.trim();
     const esEst = rp.ok && rolTxt === 'Estudiante';
-    const esDoc = rp.ok && rolTxt === 'Docente' && ru.ok && esDocente(uIn.value);
+    const esDoc = rp.ok && (rolTxt === 'Docente' || rolTxt === 'Administrativo') && ru.ok && enLista(PERSONAL[rolTxt], uIn.value);
     mostrar($('cursoBox'), esEst);
     if (!esEst) { $('curso').value = ''; $('curso').classList.remove('ok', 'bad'); }
     mostrar($('pinBox'), esDoc);
@@ -465,50 +489,65 @@
      Se acepta solo el nombre, solo el apellido o ambos (en orden). Una línea por docente. */
   const DOCENTES = [
     'Maria Rosario', 'Salvador Cobos', 'Maria del Carmen', 'Edith Meker', 'Laura Baena', 'Genny Andrea',
-    'Claudia Patricia', 'Luis Fernando', 'Javier Serrano', 'Luisa Fernanda', 'Monica Cristina',
-    'Yolima Del Pilar', 'Arnulfo Sepulveda', 'Fabio Duran', 'Ladys Teresa', 'Ginna Julieth', 'Liliana Ibarguen', 'Clelia Smith',
-    'Karen Julieth'
+    'Claudia Patricia', 'Luis Fernando', 'Javier Serrano', 'Luisa Fernanda',
+    'Yolima Del Pilar', 'Arnulfo Sepulveda', 'Fabio Duran'
   ];
+  const AUXILIARES = ['Ladys Teresa'];
+  const ADMINISTRATIVOS = ['Monica Cristina', 'Ginna Julieth', 'Clelia Smith', 'Liliana Ibarguen', 'Karen Julieth'];
+  const PERSONAL = { Docente: DOCENTES, Auxiliar: AUXILIARES, Administrativo: ADMINISTRATIVOS };
+  const PLURAL = { Docente: 'docentes', Auxiliar: 'auxiliares', Administrativo: 'administrativos' };
   const CONECTORES = ['de', 'del', 'la', 'las', 'los', 'y'];
   const palabras = s => strip(s).trim().split(/\s+/);
-  function esDocente(nombre) {
+  /* ¿El nombre coincide con alguien de la lista? (nombre, apellido o ambos, en orden) */
+  function enLista(lista, nombre) {
     const t = palabras(nombre);
     if (CONECTORES.includes(t[0]) || CONECTORES.includes(t[t.length - 1])) return false;
-    return DOCENTES.some(d => {
+    return lista.some(d => {
       const dt = palabras(d); let i = 0;
       for (const w of t) { i = dt.indexOf(w, i); if (i < 0) return false; i++; }
       return true;
     });
+  }
+  const esDocente = n => enLista(DOCENTES, n);
+  /* Si el nombre pertenece a otro rol del personal, devuelve ese rol (ej: "Administrativo"); si no, ''.
+     Con rol Estudiante o Visitante se exige nombre + apellido, para no bloquear a quien solo comparte un nombre de pila. */
+  function rolAsignado(nombre, rol) {
+    if (rol === 'Estudiante' && esEstudiante(nombre, $('curso').value)) return '';
+    if (PERSONAL[rol] && enLista(PERSONAL[rol], nombre)) return '';
+    const t = palabras(nombre).filter(w => !CONECTORES.includes(w));
+    if (!PERSONAL[rol] && t.length < 2) return '';
+    return Object.keys(PERSONAL).filter(r => r !== rol && enLista(PERSONAL[r], nombre)).join(' o ');
   }
 
   /* ---------- Animación "Verificando…" ---------- */
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const label = $('btnlabel');
   function setLabel(t) { label.textContent = t; label.classList.remove('fade'); void label.offsetWidth; label.classList.add('fade'); }
-  async function verificarDocente() {
-    btn.disabled = true; uIn.readOnly = pIn.readOnly = true;
+  async function verificarPersonal(rol) {
+    btn.disabled = true; uIn.readOnly = pIn.readOnly = true; pinIn.readOnly = true;
     btn.classList.add('checking');
     await sleep(30);
-    const pasos = ['Verificando datos…', 'Comprobando lista de docentes…', 'Validando identidad…'];
+    const pasos = ['Verificando datos…', 'Comprobando lista de ' + PLURAL[rol] + '…', 'Validando identidad…'];
     for (let i = 0; i < pasos.length; i++) {
       setLabel(pasos[i]);
       btn.style.setProperty('--p', ((i + 1) * 33.4) + '%');
       await sleep(950);
     }
-    const ok = esDocente(uIn.value);
+    const ok = enLista(PERSONAL[rol], uIn.value);
     btn.classList.remove('checking'); btn.style.removeProperty('--p');
     if (ok) {
-      btn.classList.add('verified'); setLabel('Docente verificado ✓');
+      btn.classList.add('verified'); setLabel(rol + ' verificado ✓');
       await sleep(900);
       return true;
     }
     btn.classList.add('denied'); setLabel('No se pudo verificar');
     plant.setAttribute('class', 'plant s1'); $('barfill').style.width = '50%';
-    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en la lista de docentes. Revísalo o ingresa con otro rol.' }, true);
+    const n = fallo();
+    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en la lista de ' + PLURAL[rol] + '. Revísalo o ingresa con otro rol.' + intento(n) }, true);
     card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
     await sleep(1800);
     btn.classList.remove('denied'); setLabel('Ingresar');
-    btn.disabled = false; uIn.readOnly = pIn.readOnly = false; uIn.focus();
+    btn.disabled = false; uIn.readOnly = pIn.readOnly = false; pinIn.readOnly = false; uIn.focus();
     return false;
   }
 
@@ -543,49 +582,30 @@
   const h53 = (s, seed = 0) => { let a = 0xdeadbeef ^ seed, b = 0x41c6ce57 ^ seed; for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); } a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909); b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909); return 4294967296 * (2097151 & b) + (a >>> 0); };
   const SEG = [4120791596001276, 8252721565375576, 2271514558588381];
   const secEl = $('sec'), secForm = $('secForm'), secMsg = $('secMsg'), secGo = $('secGo');
-  let contando = null;
-  function bloqueo() {
-    try { return Math.max(0, Math.ceil(((+sessionStorage.getItem('adminLock') || 0) - Date.now()) / 1000)); } catch (e) { return 0; }
-  }
-  function cuenta() {
-    clearTimeout(contando);
-    const s = bloqueo();
-    if (s <= 0) { secGo.disabled = false; secMsg.className = 'sec-msg'; secMsg.textContent = ''; return; }
-    secGo.disabled = true; secMsg.className = 'sec-msg'; secMsg.textContent = 'Demasiados intentos. Espera ' + s + ' s…';
-    contando = setTimeout(cuenta, 500);
-  }
-  let fallos = 0;
   function pedirSeguridad() {
     return new Promise(resolve => {
       const ins = secForm.querySelectorAll('input');
       ins.forEach(i => { i.value = ''; });
-      secMsg.className = 'sec-msg'; secMsg.textContent = '';
+      secMsg.className = 'sec-msg'; secMsg.textContent = ''; secGo.disabled = false;
       secEl.classList.add('show'); secEl.setAttribute('aria-hidden', 'false');
-      cuenta();
       setTimeout(() => ins[0].focus(), 600);
       const cerrar = ok => {
         secEl.classList.remove('show'); secEl.setAttribute('aria-hidden', 'true');
-        secForm.onsubmit = null; $('secNo').onclick = null; clearTimeout(contando); resolve(ok);
+        secForm.onsubmit = null; $('secNo').onclick = null; resolve(ok);
       };
       $('secNo').onclick = () => cerrar(false);
       secForm.onsubmit = e => {
         e.preventDefault();
-        if (bloqueo() > 0) { cuenta(); return; }
         const ok = SEG.every((h, i) => h53(ins[i].value.trim()) === h);
         if (ok) {
           secMsg.className = 'sec-msg ok'; secMsg.textContent = 'Identidad confirmada ✓'; secGo.disabled = true;
           setTimeout(() => { secGo.disabled = false; cerrar(true); }, 700);
           return;
         }
-        fallos++;
         secForm.classList.remove('shake'); void secForm.offsetWidth; secForm.classList.add('shake');
-        if (fallos >= 3) {
-          fallos = 0;
-          try { sessionStorage.setItem('adminLock', Date.now() + 30000); } catch (err) {}
-          cuenta();
-        } else {
-          secMsg.className = 'sec-msg'; secMsg.textContent = 'Alguna respuesta es incorrecta. Intento ' + fallos + ' de 3.';
-        }
+        const n = fallo();
+        if (n >= MAX_FALLOS) { cerrar(false); return; }
+        secMsg.className = 'sec-msg'; secMsg.textContent = 'Alguna respuesta es incorrecta.' + intento(n);
       };
     });
   }
@@ -639,7 +659,8 @@
     if (ok) { btn.classList.add('verified'); setLabel('Estudiante registrado ✓'); await sleep(900); return true; }
     btn.classList.add('denied'); setLabel('No se pudo registrar');
     plant.setAttribute('class', 'plant s1'); $('barfill').style.width = '50%';
-    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en el curso ' + $('curso').value + '. Revisa cómo lo escribiste o el curso elegido.' }, true);
+    const n = fallo();
+    paint(uIn, hu, { ok: false, msg: 'No encontramos ese nombre en el curso ' + $('curso').value + '. Revisa cómo lo escribiste o el curso elegido.' + intento(n) }, true);
     card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
     await sleep(1800);
     btn.classList.remove('denied'); setLabel('Ingresar');
@@ -703,10 +724,56 @@
     $('ht').className = 'hint'; $('ht').textContent = ''; update();
   }));
 
+  /* ---------- Bloqueo: 3 fallos en cualquier rol = 2 minutos sin poder ingresar ----------
+     Se guarda en localStorage, así que sigue activo aunque recarguen o cierren la pestaña. */
+  const LOCK_MS = 120000, MAX_FALLOS = 3;
+  const lockEl = $('lock'), lockTime = $('lockTime'), lockArc = $('lockArc');
+  let lockT = null;
+  const ls = {
+    get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+    del: k => { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+  const bloqueoRestante = () => Math.min(LOCK_MS, Math.max(0, (+ls.get('lg_lock') || 0) - Date.now()));
+  const intento = n => n < MAX_FALLOS ? ' (Intento ' + n + ' de ' + MAX_FALLOS + ')' : '';
+  function limpiarFallos() { ls.del('lg_fails'); }
+  function fallo() {
+    const n = (+ls.get('lg_fails') || 0) + 1;
+    if (n >= MAX_FALLOS) { ls.set('lg_lock', Date.now() + LOCK_MS); ls.set('lg_fails', 0); mostrarBloqueo(); return MAX_FALLOS; }
+    ls.set('lg_fails', n);
+    return n;
+  }
+  function mostrarBloqueo() {
+    const shell = document.querySelector('.shell');
+    shell.inert = true;
+    lockEl.classList.add('show'); lockEl.setAttribute('aria-hidden', 'false');
+    clearInterval(lockT);
+    const tick = () => {
+      const ms = bloqueoRestante();
+      if (ms <= 0) {
+        clearInterval(lockT); ls.del('lg_lock'); ls.del('lg_fails');
+        lockEl.classList.remove('show'); lockEl.setAttribute('aria-hidden', 'true'); shell.inert = false;
+        return;
+      }
+      const sg = Math.ceil(ms / 1000);
+      lockTime.textContent = Math.floor(sg / 60) + ':' + String(sg % 60).padStart(2, '0');
+      lockArc.style.strokeDashoffset = 326.7 * (1 - ms / LOCK_MS);
+    };
+    tick(); lockT = setInterval(tick, 250);
+  }
+  function denegarRol(asig) {
+    const n = fallo();
+    paint(uIn, hu, { ok: false, msg: 'Ese nombre está asignado al rol ' + asig + '. Ingresa con ese rol.' + intento(n) }, true);
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    uIn.focus();
+  }
+  if (bloqueoRestante() > 0) mostrarBloqueo();
+
   /* ---------- Envío ---------- */
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
-    if (esAdmin()) { if (await pedirSeguridad()) await entrarAdmin(); return; }
+    if (bloqueoRestante() > 0) { mostrarBloqueo(); return; }
+    if (esAdmin()) { if (await pedirSeguridad()) { limpiarFallos(); await entrarAdmin(); } return; }
     touchedU = touchedP = true;
     const { ru, rp, all } = update();
     if (!all) {
@@ -717,24 +784,30 @@
         if (r === 'Estudiante') {
           $('hc').className = 'hint bad'; $('hc').textContent = 'Selecciona tu curso para continuar.';
           $('curso').classList.add('bad'); $('curso').focus();
-        } else if (r === 'Docente') {
+        } else if (r === 'Docente' || r === 'Administrativo') {
+          const completo = pinIn.value.length === 4;
+          const n = completo ? fallo() : 0;
           $('hpin').className = 'hint bad';
-          $('hpin').textContent = pinIn.value.length === 4 ? 'PIN incorrecto. Revisa la nube o pide uno nuevo.' : 'Escribe el PIN de 4 dígitos que aparece en la nube.';
+          $('hpin').textContent = completo ? 'PIN incorrecto. Revisa la nube o pide uno nuevo.' + intento(n) : 'Escribe el PIN de 4 dígitos que aparece en la nube.';
           pinIn.classList.add('bad'); pinIn.focus();
         } else { errTipo(); document.querySelector('input[name=tipo]').focus(); }
       }
       else (ru.ok ? pIn : uIn).focus();
       return;
     }
-    if (pIn.value.trim() === 'Docente' && !(await verificarDocente())) return;
-    if (pIn.value.trim() === 'Estudiante' && !(await registrarEstudiante())) return;
+    const rol = pIn.value.trim();
+    const asig = rolAsignado(uIn.value, rol);
+    if (asig) { denegarRol(asig); return; }
+    if (PERSONAL[rol] && !(await verificarPersonal(rol))) return;
+    if (rol === 'Estudiante' && !(await registrarEstudiante())) return;
+    limpiarFallos();
     btn.disabled = true;
     try {
-      sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: pIn.value.trim(), tipo: tipoSel() }));
-      sessionStorage.setItem('sesionActiva', 'true');   // <-- NUEVO: marca de sesión para auth.js
+      sessionStorage.setItem('usuario', JSON.stringify({ nombre: uIn.value.trim().replace(/\s+/g, ' '), rol: rol, tipo: tipoSel() }));
+      sessionStorage.setItem('sesionActiva', 'true');   // marca de sesión para auth.js
     } catch (err) {}
     $('wtitle').textContent = 'Bienvenido(a), ' + uIn.value.trim();
-    $('wsub').textContent = 'Ingresando como ' + pIn.value.trim() + (extraRol() ? ' (' + extraRol() + ')' : '') + ' a Infantas Web - Blog';
+    $('wsub').textContent = 'Ingresando como ' + rol + (extraRol() ? ' (' + extraRol() + ')' : '') + ' a Infantas Web - Blog';
     $('welcome').classList.add('show');
     setTimeout(() => { window.location.href = './home.html'; }, 3000);
   });

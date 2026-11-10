@@ -442,6 +442,69 @@ body {
     color: white;
 }
 
+/* PAREJAS / GRUPOS */
+
+.student-avatars {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.student-avatars .student-avatar + .student-avatar {
+    margin-left: -13px;
+    border: 2px solid #ffffff;
+}
+
+.student-avatars .student-avatar:nth-child(2) {
+    background: #fff7df;
+    color: #b78a13;
+}
+
+.student-avatars .student-avatar:nth-child(3) {
+    background: #eaf0ff;
+    color: #4567b7;
+}
+
+.student-name + .student-name {
+    margin-top: 3px;
+}
+
+/* ENLACE NO DISPONIBLE (ROJO) */
+
+.student-card.pending {
+    background: #fff6f6;
+    border-color: #f1b8b8;
+}
+
+.student-card.pending:hover {
+    border-color: #e58f8f;
+    box-shadow: 0 8px 22px rgba(190,50,50,.08);
+}
+
+.student-card.pending .student-avatar {
+    background: #fde7e7;
+    color: #b42b2b;
+    border-color: #fff6f6;
+}
+
+.student-card.pending .student-name {
+    color: #a12626;
+}
+
+.student-card.pending .student-description {
+    color: #c06a6a;
+}
+
+.student-card.pending .student-button {
+    background: #fde7e7;
+    color: #b42b2b;
+}
+
+.student-card.pending .student-button:hover {
+    background: #b42b2b;
+    color: #ffffff;
+}
+
 /* SIN RESULTADOS */
 
 .empty-state {
@@ -827,98 +890,39 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 
 // LISTA DE ESTUDIANTES
 // Agrega nuevos estudiantes copiando el formato.
+//
+// INDIVIDUAL:
+//   { name: "Nombre Apellido", link: "https://..." }
+//
+// PAREJA O GRUPO (varios nombres en un solo bloque y un solo enlace):
+//   { names: ["Ana Perez", "Luis Gomez"], link: "https://..." }
+//   { names: ["Ana Perez", "Luis Gomez", "Sara Diaz"], link: "https://..." }
+//
+// ENLACE DISPONIBLE O NO (campo "disponible"):
+//   disponible: "si"  -> se muestra normal (es el valor por defecto)
+//   disponible: "no"  -> se muestra en ROJO y el boton lleva a link.html
+//                        (no hace falta escribir link)
+//   Ejemplos:
+//   { name: "Nombre Apellido", disponible: "no" },
+//   { names: ["Ana Perez", "Luis Gomez"], disponible: "no" },
+//   { names: ["Ana Perez", "Luis Gomez"], link: "https://...", disponible: "si" },
 
 const students = [
 
-    {
-        name: "Anny Macias",
-        link: "https://ejemplo.com/anny"
-    },
-
-    {
-        name: "Belen Pertuz",
-        link: "https://ejemplo.com/belen"
-    },
-
-    {
-        name: "Brayan Rangel",
-        link: "https://ejemplo.com/brayan"
-    },
-
-    {
-        name: "Daniel Merchan",
-        link: "https://ejemplo.com/daniel"
-    },
-
-    {
-        name: "Efrain Guiza",
-        link: "https://ejemplo.com/efrain"
-    },
-
-    {
-        name: "Jhosept Fonseca",
-        link: "https://ejemplo.com/jhosept"
-    },
-
-    {
-        name: "Johana Ochoa",
-        link: "https://ejemplo.com/johana"
-    },
-
-    {
-        name: "Jorgeth Monsalve",
-        link: "https://ejemplo.com/jorgeth"
-    },
-
-    {
-        name: "Joshuad Rodriguez",
-        link: "https://ejemplo.com/joshuad"
-    },
-
-    {
-        name: "Juan Pinto",
-        link: "https://ejemplo.com/juan-pinto"
-    },
-
-    {
-        name: "Juan Lopez",
-        link: "https://ejemplo.com/juan-lopez"
-    },
-
-    {
-        name: "Juan Parra",
-        link: "https://ejemplo.com/juan-parra"
-    },
-
-    {
-        name: "Karina Perez",
-        link: "https://ejemplo.com/karina"
-    },
-
-    {
-        name: "Luciana Paba",
-        link: "https://ejemplo.com/luciana"
-    },
-
-    {
-        name: "Luis Rey",
-        link: "https://ejemplo.com/luis"
-    },
-
-    {
-        name: "Sara Pertuz",
-        link: "https://ejemplo.com/sara"
-    },
-
-    {
-        name: "Shayrick Guzman",
-        link: "https://ejemplo.com/shayrick"
-    },
-
-    {
-        name: "Jorge Gelvez",
-        link: "https://ejemplo.com/jorge-gelvez"
-    }
+    { name: "Anny Macias", link: "https://wayground.com/join?gc=48535395" },
+    { name: "Belen Pertuz", disponible: "no" },
+    { name: "Brayan Rangel", disponible: "no" },
+    { name: "Daniel Merchan", disponible: "no" },
+    { names: ["Efrain Guiza", "Juan Pinto"], disponible: "no" },
+    { names: ["Jhosept Fonseca", "Juan Parra"], disponible: "no" },
+    { names: ["Johana Ochoa", "Jorgeth Monsalve"], link: "https://canva.link/at3a3snb2db7m91" },
+    { names: ["Joshuad Rodriguez", "Jorge Gelvez"], link: "https://surveymars.com/q/d0cABuhKQ" },
+    { name: "Juan Lopez", disponible: "no" },
+    { name: "Karina Perez", disponible: "no" },
+    { name: "Luciana Paba", disponible: "no" },
+    { name: "Luis Rey", disponible: "no" },
+    { name: "Sara Pertuz", link: "https://drive.google.com/file/d/1r1wf-AqrdpjEd4WP1Hguvx-A5yVNBKZR/view?usp=sharing" },
+    { name: "Shayrick Guzman", disponible: "no" },
 
 ];
 
@@ -959,15 +963,70 @@ function getInitials(name) {
 }
 
 
+// NOMBRES DE UNA ENTRADA (acepta name, o names: [...])
+
+function getNames(student) {
+
+    if (Array.isArray(student.names)) {
+        return student.names.filter(Boolean);
+    }
+
+    return [student.name].filter(Boolean);
+
+}
+
+
+// ¿EL ENLACE ESTA DISPONIBLE?
+
+function isAvailable(student) {
+
+    const flag = normalizeText(String(student.disponible ?? "si"));
+    const url = String(student.link || "").trim();
+
+    if (flag === "no" || flag === "false") return false;
+    if (normalizeText(url) === "no" || url === "") return false;
+
+    return true;
+
+}
+
+
+// DIRECCION DE link.html CON LOS NOMBRES
+
+function pendingUrl(names) {
+
+    const params = new URLSearchParams();
+
+    names.forEach((n, i) => {
+        params.set(i === 0 ? "nombre" : "nombre" + (i + 1), n);
+    });
+
+    params.set("grado", "11-B");
+
+    return "./link.html?" + params.toString();
+
+}
+
+
+// CONTAR PERSONAS (una pareja cuenta como 2 estudiantes)
+
+function countPeople(list) {
+
+    return list.reduce((total, s) => total + getNames(s).length, 0);
+
+}
+
+
 // MOSTRAR ESTUDIANTES
 
 function renderStudents(list) {
 
     studentGrid.innerHTML = "";
 
+    const people = countPeople(list);
+
     resultCount.textContent =
-        list.length +
-        (list.length === 1 ? " estudiante" : " estudiantes");
+        people + (people === 1 ? " estudiante" : " estudiantes");
 
     if (list.length === 0) {
 
@@ -994,40 +1053,65 @@ function renderStudents(list) {
 
     list.forEach(student => {
 
+        const names = getNames(student);
+        const available = isAvailable(student);
+
         const card = document.createElement("div");
-        card.className = "student-card";
+        card.className = "student-card" + (available ? "" : " pending");
 
         const info = document.createElement("div");
         info.className = "student-info";
 
-        const avatar = document.createElement("div");
-        avatar.className = "student-avatar";
-        avatar.textContent = getInitials(student.name);
+        const avatars = document.createElement("div");
+        avatars.className = "student-avatars";
+
+        names.forEach(n => {
+            const avatar = document.createElement("div");
+            avatar.className = "student-avatar";
+            avatar.textContent = getInitials(n);
+            avatars.appendChild(avatar);
+        });
 
         const details = document.createElement("div");
         details.className = "student-details";
 
-        const name = document.createElement("div");
-        name.className = "student-name";
-        name.textContent = student.name;
+        names.forEach(n => {
+            const name = document.createElement("div");
+            name.className = "student-name";
+            name.textContent = n;
+            details.appendChild(name);
+        });
+
+        const kind =
+            names.length === 1 ? "Estudiante" :
+            names.length === 2 ? "Pareja" :
+            "Grupo de " + names.length;
 
         const description = document.createElement("div");
         description.className = "student-description";
-        description.textContent = "Estudiante · Grado 11° B";
+        description.textContent =
+            kind + " · Grado 11° B" + (available ? "" : " · Enlace pendiente");
 
-        details.appendChild(name);
         details.appendChild(description);
 
-        info.appendChild(avatar);
+        info.appendChild(avatars);
         info.appendChild(details);
+
+        const href = available ? student.link : pendingUrl(names);
 
         const link = document.createElement("a");
 
         link.className = "student-button student-link";
-        link.href = student.link;
-        link.textContent = "Ver publicación";
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
+        link.href = href;
+        link.textContent = available ? "Ver publicación" : "Enlace pendiente";
+
+        // Enlaces externos (https://...) se abren en otra pestaña.
+        // Páginas del sitio (link.html) se abren en la MISMA pestaña
+        // para conservar la sesión iniciada.
+        if (/^https?:\/\//i.test(href)) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        }
 
         card.appendChild(info);
         card.appendChild(link);
@@ -1047,7 +1131,9 @@ studentSearch.addEventListener("input", () => {
 
     const filtered = students.filter(student => {
 
-        return normalizeText(student.name).includes(query);
+        return getNames(student).some(n =>
+            normalizeText(n).includes(query)
+        );
 
     });
 
@@ -1058,7 +1144,7 @@ studentSearch.addEventListener("input", () => {
 
 // INICIALIZAR DIRECTORIO
 
-totalStudents.textContent = students.length;
+totalStudents.textContent = countPeople(students);
 
 renderStudents(students);
 

@@ -442,6 +442,69 @@ body {
     color: white;
 }
 
+/* PAREJAS / GRUPOS */
+
+.student-avatars {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.student-avatars .student-avatar + .student-avatar {
+    margin-left: -13px;
+    border: 2px solid #ffffff;
+}
+
+.student-avatars .student-avatar:nth-child(2) {
+    background: #fff7df;
+    color: #b78a13;
+}
+
+.student-avatars .student-avatar:nth-child(3) {
+    background: #eaf0ff;
+    color: #4567b7;
+}
+
+.student-name + .student-name {
+    margin-top: 3px;
+}
+
+/* ENLACE NO DISPONIBLE (ROJO) */
+
+.student-card.pending {
+    background: #fff6f6;
+    border-color: #f1b8b8;
+}
+
+.student-card.pending:hover {
+    border-color: #e58f8f;
+    box-shadow: 0 8px 22px rgba(190,50,50,.08);
+}
+
+.student-card.pending .student-avatar {
+    background: #fde7e7;
+    color: #b42b2b;
+    border-color: #fff6f6;
+}
+
+.student-card.pending .student-name {
+    color: #a12626;
+}
+
+.student-card.pending .student-description {
+    color: #c06a6a;
+}
+
+.student-card.pending .student-button {
+    background: #fde7e7;
+    color: #b42b2b;
+}
+
+.student-card.pending .student-button:hover {
+    background: #b42b2b;
+    color: #ffffff;
+}
+
 /* SIN RESULTADOS */
 
 .empty-state {
@@ -827,104 +890,43 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 
 // LISTA DE ESTUDIANTES
 // Agrega nuevos estudiantes copiando el formato.
+//
+// INDIVIDUAL:
+//   { name: "Nombre Apellido", link: "https://..." }
+//
+// PAREJA O GRUPO (varios nombres en un solo bloque y un solo enlace):
+//   { names: ["Ana Perez", "Luis Gomez"], link: "https://..." }
+//   { names: ["Ana Perez", "Luis Gomez", "Sara Diaz"], link: "https://..." }
+//
+// ENLACE DISPONIBLE O NO (campo "disponible"):
+//   disponible: "si"  -> se muestra normal (es el valor por defecto)
+//   disponible: "no"  -> se muestra en ROJO y el boton lleva a link.html
+//                        (no hace falta escribir link)
+//   Ejemplos:
+//   { name: "Nombre Apellido", disponible: "no" },
+//   { names: ["Ana Perez", "Luis Gomez"], disponible: "no" },
+//   { names: ["Ana Perez", "Luis Gomez"], link: "https://...", disponible: "si" },
 
 const students = [
 
-    {
-        name: "Alejandro Gomez",
-        link: "https://ejemplo.com/alejandro-gomez"
-    },
-
-    {
-        name: "Isabella Hernandez",
-        link: "https://ejemplo.com/alejandro-gomez"
-    },
-
-
-    {
-        name: "Juliana",
-        link: "https://ejemplo.com/alejandro-gomez"
-    },
-
-    {
-        name: "Camila Prada",
-        link: "https://ejemplo.com/camila-prada"
-    },
-
-    {
-        name: "David Suarez",
-        link: "https://ejemplo.com/david-suarez"
-    },
-
-    {
-        name: "Emily Centeno",
-        link: "https://ejemplo.com/emily-centeno"
-    },
-
-    {
-        name: "Frank Ricuarte",
-        link: "https://ejemplo.com/frank-ricuarte"
-    },
-
-    {
-        name: "Heilyn Moreno",
-        link: "https://ejemplo.com/heilyn-moreno"
-    },
-
-    {
-        name: "Viancy Moreno",
-        link: "https://ejemplo.com/viancy-moreno"
-    },
-
-    {
-        name: "Isabella Saavedra",
-        link: "https://ejemplo.com/isabella-saavedra"
-    },
-
-    {
-        name: "Jesus Cuellar",
-        link: "https://ejemplo.com/jesus-cuellar"
-    },
-
-    {
-        name: "Jireth Gomez",
-        link: "https://ejemplo.com/jireth-gomez"
-    },
-
-    {
-        name: "Juan Jose Castro",
-        link: "https://ejemplo.com/juan-jose-castro"
-    },
-
-    {
-        name: "Alejandra Restrepo",
-        link: "https://ejemplo.com/alejandra-restrepo"
-    },
-
-    {
-        name: "Maria Juliana Gil",
-        link: "https://ejemplo.com/maria-juliana-gil"
-    },
-
-    {
-        name: "Mateo Florez",
-        link: "https://ejemplo.com/mateo-florez"
-    },
-
-    {
-        name: "Nicole Rodriguez",
-        link: "https://ejemplo.com/nicole-rodriguez"
-    },
-
-    {
-        name: "Susan Reyes",
-        link: "https://ejemplo.com/susan-reyes"
-    },
-
-    {
-        name: "Yelsi Lorena",
-        link: "https://ejemplo.com/yelsi-lorena"
-    }
+    { name: "Juan Jose Castro", link: "https://view.genially.com/6ad7cb7d4f1d84f80e3f61d5" },
+    { name: "Emily Centeno", link: "https://docs.google.com/document/d/1omx3077ZTJxM9zzzTL9tmG-CIvhFRV8UY3RckzrQkUY/edit?usp=drivesdk" },
+    { name: "Jesus Cuellar", link: "https://sites.google.com/u/1/d/1rEJxNedc0S1G3912zq-bfzlFJ-MB9u5R/preview" },
+    { name: "Mateo Florez", link: "https://canva.link/yfpzejo2cexliog" },
+    { name: "Maria Juliana Gil", disponible: "no" },
+    { name: "Jireth Gomez", disponible: "no" },
+    { name: "Alejandro Gomez", disponible: "no" },
+    { name: "Isabella Hernandez", disponible: "no" },
+    { name: "Heilyn Moreno", link: "https://canva.link/4h8aqtzixp2sju4" },
+    { name: "Viancy Moreno", link: "https://blogviancyjmb.my.canva.site/blogviancyjmv" },
+    { name: "Camila Prada", link: "https://dachshund-robin-7844.squarespace.com/config/website" },
+    { name: "Alejandra Restrepo", disponible: "no" },
+    { name: "Susan Reyes", disponible: "no" },
+    { name: "Frank Ricaurte", disponible: "no" },
+    { name: "Nicole Rodriguez", disponible: "no" },
+    { name: "Isabella Saavedra", disponible: "no" },
+    { name: "David Suarez", disponible: "no" },
+    { name: "Yelsi Viloria", link: "https://create.kahoot.it/share/evaluacion-final-etica/46c99007-ed11-401f-8ce1-9d2cdab92b7f" },
 
 ];
 
@@ -965,15 +967,70 @@ function getInitials(name) {
 }
 
 
+// NOMBRES DE UNA ENTRADA (acepta name, o names: [...])
+
+function getNames(student) {
+
+    if (Array.isArray(student.names)) {
+        return student.names.filter(Boolean);
+    }
+
+    return [student.name].filter(Boolean);
+
+}
+
+
+// ¿EL ENLACE ESTA DISPONIBLE?
+
+function isAvailable(student) {
+
+    const flag = normalizeText(String(student.disponible ?? "si"));
+    const url = String(student.link || "").trim();
+
+    if (flag === "no" || flag === "false") return false;
+    if (normalizeText(url) === "no" || url === "") return false;
+
+    return true;
+
+}
+
+
+// DIRECCION DE link.html CON LOS NOMBRES
+
+function pendingUrl(names) {
+
+    const params = new URLSearchParams();
+
+    names.forEach((n, i) => {
+        params.set(i === 0 ? "nombre" : "nombre" + (i + 1), n);
+    });
+
+    params.set("grado", "10-B");
+
+    return "./link.html?" + params.toString();
+
+}
+
+
+// CONTAR PERSONAS (una pareja cuenta como 2 estudiantes)
+
+function countPeople(list) {
+
+    return list.reduce((total, s) => total + getNames(s).length, 0);
+
+}
+
+
 // MOSTRAR ESTUDIANTES
 
 function renderStudents(list) {
 
     studentGrid.innerHTML = "";
 
+    const people = countPeople(list);
+
     resultCount.textContent =
-        list.length +
-        (list.length === 1 ? " estudiante" : " estudiantes");
+        people + (people === 1 ? " estudiante" : " estudiantes");
 
     if (list.length === 0) {
 
@@ -1000,40 +1057,65 @@ function renderStudents(list) {
 
     list.forEach(student => {
 
+        const names = getNames(student);
+        const available = isAvailable(student);
+
         const card = document.createElement("div");
-        card.className = "student-card";
+        card.className = "student-card" + (available ? "" : " pending");
 
         const info = document.createElement("div");
         info.className = "student-info";
 
-        const avatar = document.createElement("div");
-        avatar.className = "student-avatar";
-        avatar.textContent = getInitials(student.name);
+        const avatars = document.createElement("div");
+        avatars.className = "student-avatars";
+
+        names.forEach(n => {
+            const avatar = document.createElement("div");
+            avatar.className = "student-avatar";
+            avatar.textContent = getInitials(n);
+            avatars.appendChild(avatar);
+        });
 
         const details = document.createElement("div");
         details.className = "student-details";
 
-        const name = document.createElement("div");
-        name.className = "student-name";
-        name.textContent = student.name;
+        names.forEach(n => {
+            const name = document.createElement("div");
+            name.className = "student-name";
+            name.textContent = n;
+            details.appendChild(name);
+        });
+
+        const kind =
+            names.length === 1 ? "Estudiante" :
+            names.length === 2 ? "Pareja" :
+            "Grupo de " + names.length;
 
         const description = document.createElement("div");
         description.className = "student-description";
-        description.textContent = "Estudiante · Grado 10° B";
+        description.textContent =
+            kind + " · Grado 10° B" + (available ? "" : " · Enlace pendiente");
 
-        details.appendChild(name);
         details.appendChild(description);
 
-        info.appendChild(avatar);
+        info.appendChild(avatars);
         info.appendChild(details);
+
+        const href = available ? student.link : pendingUrl(names);
 
         const link = document.createElement("a");
 
         link.className = "student-button student-link";
-        link.href = student.link;
-        link.textContent = "Ver publicación";
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
+        link.href = href;
+        link.textContent = available ? "Ver publicación" : "Enlace pendiente";
+
+        // Enlaces externos (https://...) se abren en otra pestaña.
+        // Páginas del sitio (link.html) se abren en la MISMA pestaña
+        // para conservar la sesión iniciada.
+        if (/^https?:\/\//i.test(href)) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        }
 
         card.appendChild(info);
         card.appendChild(link);
@@ -1053,7 +1135,9 @@ studentSearch.addEventListener("input", () => {
 
     const filtered = students.filter(student => {
 
-        return normalizeText(student.name).includes(query);
+        return getNames(student).some(n =>
+            normalizeText(n).includes(query)
+        );
 
     });
 
@@ -1064,7 +1148,7 @@ studentSearch.addEventListener("input", () => {
 
 // INICIALIZAR DIRECTORIO
 
-totalStudents.textContent = students.length;
+totalStudents.textContent = countPeople(students);
 
 renderStudents(students);
 

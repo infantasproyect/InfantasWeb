@@ -531,6 +531,69 @@ input:focus {
     background: var(--dark);
 }
 
+/* PAREJAS / GRUPOS */
+
+.student-avatars {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.student-avatars .student-avatar + .student-avatar {
+    margin-left: -13px;
+    border: 2px solid #ffffff;
+}
+
+.student-avatars .student-avatar:nth-child(2) {
+    background: #fff7df;
+    color: #b78a13;
+}
+
+.student-avatars .student-avatar:nth-child(3) {
+    background: #eaf0ff;
+    color: #4567b7;
+}
+
+.student-name + .student-name {
+    margin-top: 3px;
+}
+
+/* ENLACE PENDIENTE (ROJO) */
+
+.student.pending {
+    background: #fff6f6;
+    border-color: #f1b8b8;
+}
+
+.student.pending:hover {
+    background: #fff1f1;
+    border-color: #e58f8f;
+}
+
+.student.pending .student-avatar {
+    background: #fde7e7;
+    color: #b42b2b;
+    border-color: #fff6f6;
+}
+
+.student.pending .student-name {
+    color: #a12626;
+}
+
+.student.pending .student-grade {
+    color: #c06a6a;
+}
+
+.student.pending .open-link {
+    background: #fde7e7;
+    color: #b42b2b;
+}
+
+.student.pending .open-link:hover {
+    background: #b42b2b;
+    color: #ffffff;
+}
+
 .empty {
     padding: 40px 15px;
     text-align: center;
@@ -699,8 +762,9 @@ footer span {
 
         <p>
             Encuentra facilmente las publicaciones de los estudiantes.
-            Selecciona un grado o busca directamente por nombre
-            y accede a cada enlace disponible.
+            Selecciona un grado o busca directamente por nombre,
+            incluyendo parejas y grupos. Los enlaces pendientes
+            aparecen en rojo.
         </p>
 
     </div>
@@ -832,17 +896,25 @@ footer span {
             <option value="11c">11 C - Once C</option>
         </select>
 
-        <label for="searchInput">NOMBRE DEL ESTUDIANTE O GRADO</label>
+        <label for="stateSelect">ESTADO DEL ENLACE</label>
+
+        <select id="stateSelect">
+            <option value="">Todos (con enlace y pendientes)</option>
+            <option value="ok">Solo con enlace</option>
+            <option value="pending">Solo enlaces pendientes</option>
+        </select>
+
+        <label for="searchInput">NOMBRE DEL ESTUDIANTE O PAREJA</label>
 
         <input
             type="text"
             id="searchInput"
-            placeholder="Ej: Juan Perez, Maria Lopez, 10A..."
+            placeholder="Ej: Juan Perez, una pareja"
             autocomplete="off"
         >
 
         <p class="search-hint">
-            Escribe un nombre para buscar o escribe 10A, Decimo A, 11B, Once B, etc.
+            Escribe un nombre (también funciona con parejas y grupos) o escribe 10A, Decimo A, 11B, Once B, etc.
         </p>
 
         <div class="loading-status" id="loadingStatus">
@@ -933,6 +1005,7 @@ const grades = {
 ========================= */
 
 const gradeSelect = document.getElementById("gradeSelect");
+const stateSelect = document.getElementById("stateSelect");
 const searchInput = document.getElementById("searchInput");
 const results = document.getElementById("results");
 const counter = document.getElementById("counter");
@@ -1023,6 +1096,81 @@ function extractProperty(objectText, property) {
 
 
 /* =========================
+   NOMBRES DE UNA ENTRADA
+   (name: "Ana"  o  names: ["Ana", "Luis"])
+========================= */
+
+function extractNames(objectText) {
+
+    const list = objectText.match(/(?:^|[,\s])names\s*:\s*\[([\s\S]*?)\]/);
+
+    if (list) {
+
+        const found = [];
+        const itemRegex = /(["'`])((?:\\.|(?!\1)[\s\S])*)\1/g;
+
+        let item;
+
+        while ((item = itemRegex.exec(list[1])) !== null) {
+
+            const value = item[2].replace(/\\(["'`\\])/g, "$1").trim();
+
+            if (value) found.push(value);
+
+        }
+
+        return found;
+
+    }
+
+    const single = extractProperty(objectText, "name");
+
+    return single ? [single] : [];
+
+}
+
+
+/* =========================
+   ¿EL ENLACE ESTA DISPONIBLE?
+   (igual que en las páginas de los grados)
+========================= */
+
+function isLinkAvailable(flag, href) {
+
+    const f = normalize(flag || "si");
+    const u = normalize(href || "");
+
+    if (f === "no" || f === "false") return false;
+    if (u === "" || u === "no") return false;
+
+    return true;
+
+}
+
+
+/* =========================
+   PAGINA link.html CON LOS NOMBRES
+========================= */
+
+function pendingPage(names, gradeKey) {
+
+    const params = new URLSearchParams();
+
+    names.forEach((n, i) => {
+        params.set(i === 0 ? "nombre" : "nombre" + (i + 1), n);
+    });
+
+    params.set(
+        "grado",
+        gradeKey.slice(0, 2) + "-" + gradeKey.slice(2).toUpperCase()
+    );
+
+    return "./link.html?" + params.toString();
+
+}
+
+
+/* =========================
    LEER ESTUDIANTES DEL HTML
 
    SOPORTA:
@@ -1057,9 +1205,11 @@ function extractStudents(html, gradeKey, gradeName, file) {
 
         extracted.push({
 
+            names: [name],
             name: name,
             grade: gradeKey,
             gradeName: gradeName,
+            pending: false,
             url: resolveURL(href, file)
 
         });
@@ -1092,19 +1242,29 @@ function extractStudents(html, gradeKey, gradeName, file) {
 
                 const objectText = objectMatch[1];
 
-                const name = extractProperty(objectText, "name");
+                // NOMBRES: name: "Ana"  o  names: ["Ana", "Luis"]
+
+                const names = extractNames(objectText);
+
+                if (names.length === 0) continue;
+
                 const href = extractProperty(objectText, "link");
+                const flag = extractProperty(objectText, "disponible");
 
-                if (!name || !href) continue;
+                const available = isLinkAvailable(flag, href);
 
-                if (href.startsWith("javascript:")) continue;
+                if (available && href.startsWith("javascript:")) continue;
 
                 extracted.push({
 
-                    name: name,
+                    names: names,
+                    name: names.join(" y "),
                     grade: gradeKey,
                     gradeName: gradeName,
-                    url: resolveURL(href, file)
+                    pending: !available,
+                    url: available
+                        ? resolveURL(href, file)
+                        : resolveURL(pendingPage(names, gradeKey), file)
 
                 });
 
@@ -1121,7 +1281,7 @@ function extractStudents(html, gradeKey, gradeName, file) {
 
     extracted.forEach(student => {
 
-        const key = normalize(student.name) + "|" + student.url;
+        const key = normalize(student.names.join("|")) + "|" + student.url;
 
         if (!unique.has(key)) {
             unique.set(key, student);
@@ -1211,7 +1371,7 @@ async function loadStudents() {
             loadedCount++;
 
             status.textContent =
-                list.length + " estudiantes";
+                countPeople(list) + " estudiantes";
 
             status.className = "grade-status loaded";
 
@@ -1243,7 +1403,9 @@ async function loadStudents() {
 
     // ACTUALIZAR ESTADISTICAS
 
-    totalStudents.textContent = students.length;
+    const pendingCount = countPeople(students.filter(s => s.pending));
+
+    totalStudents.textContent = countPeople(students);
     loadedFiles.textContent = loadedCount + "/6";
 
     // INFORMACION DEL SISTEMA
@@ -1252,7 +1414,9 @@ async function loadStudents() {
 
         loadingStatus.textContent =
             "✓ Los 6 archivos se cargaron correctamente. " +
-            students.length + " estudiantes encontrados.";
+            countPeople(students) + " estudiantes encontrados (" +
+            (countPeople(students) - pendingCount) + " con enlace, " +
+            pendingCount + " pendientes).";
 
         loadingStatus.classList.remove("error");
 
@@ -1276,6 +1440,13 @@ async function loadStudents() {
    ACTUALIZAR TARJETAS
 ========================= */
 
+function countPeople(list) {
+
+    return list.reduce((total, s) => total + s.names.length, 0);
+
+}
+
+
 function updateGradeCards(selected) {
 
     document.querySelectorAll(".grade-card").forEach(card => {
@@ -1296,11 +1467,13 @@ function updateGradeCards(selected) {
 
 function filterStudents() {
 
-    const query = normalize(searchInput.value);
-
     let selectedGrade = gradeSelect.value;
 
     const detected = detectGrade(searchInput.value);
+
+    // Si escriben un grado (10A, 11C, Once B...) se usa solo para elegir
+    // el grado y no como nombre; así se listan todos los de ese grado.
+    const query = detected ? "" : normalize(searchInput.value);
 
     // DETECTAR GRADO ESCRITO
 
@@ -1319,11 +1492,22 @@ function filterStudents() {
             !selectedGrade ||
             student.grade === selectedGrade;
 
+        // Busca por cualquier integrante de la pareja o grupo.
+        // Todas las palabras escritas deben aparecer en los nombres.
+        const haystack = normalize(student.names.join(" "));
+
         const matchesName =
             !query ||
-            normalize(student.name).includes(query);
+            query.split(" ").every(word => haystack.includes(word));
 
-        return matchesGrade && matchesName;
+        const state = stateSelect.value;
+
+        const matchesState =
+            !state ||
+            (state === "pending" && student.pending) ||
+            (state === "ok" && !student.pending);
+
+        return matchesGrade && matchesName && matchesState;
 
     });
 
@@ -1357,9 +1541,10 @@ function renderResults(list) {
 
     results.innerHTML = "";
 
+    const people = countPeople(list);
+
     counter.textContent =
-        list.length +
-        (list.length === 1 ? " estudiante" : " estudiantes");
+        people + (people === 1 ? " estudiante" : " estudiantes");
 
     if (list.length === 0) {
 
@@ -1391,32 +1576,56 @@ function renderResults(list) {
         const info = document.createElement("div");
         info.className = "student-info";
 
-        const avatar = document.createElement("div");
-        avatar.className = "student-avatar";
-        avatar.textContent = getInitials(student.name);
+        const avatars = document.createElement("div");
+        avatars.className = "student-avatars";
+
+        student.names.forEach(n => {
+            const avatar = document.createElement("div");
+            avatar.className = "student-avatar";
+            avatar.textContent = getInitials(n);
+            avatars.appendChild(avatar);
+        });
 
         const details = document.createElement("div");
 
-        const name = document.createElement("div");
-        name.className = "student-name";
-        name.textContent = student.name;
+        student.names.forEach(n => {
+            const name = document.createElement("div");
+            name.className = "student-name";
+            name.textContent = n;
+            details.appendChild(name);
+        });
+
+        const kind =
+            student.names.length === 1 ? "" :
+            student.names.length === 2 ? "Pareja · " :
+            "Grupo de " + student.names.length + " · ";
 
         const grade = document.createElement("div");
         grade.className = "student-grade";
-        grade.textContent = student.gradeName;
+        grade.textContent =
+            kind + student.gradeName +
+            (student.pending ? " · Enlace pendiente" : "");
 
-        details.appendChild(name);
         details.appendChild(grade);
 
-        info.appendChild(avatar);
+        info.appendChild(avatars);
         info.appendChild(details);
 
         const link = document.createElement("a");
         link.className = "open-link";
         link.href = student.url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = "Abrir enlace";
+        link.textContent = student.pending ? "Enlace pendiente" : "Abrir enlace";
+
+        // Enlaces externos se abren en otra pestaña; link.html en la misma
+        // para conservar la sesión iniciada.
+        if (/^https?:\/\//i.test(student.url) && !student.pending) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        }
+
+        if (student.pending) {
+            item.classList.add("pending");
+        }
 
         item.appendChild(info);
         item.appendChild(link);
@@ -1459,6 +1668,8 @@ document.querySelectorAll(".grade-card").forEach(card => {
 searchInput.addEventListener("input", filterStudents);
 
 gradeSelect.addEventListener("change", filterStudents);
+
+stateSelect.addEventListener("change", filterStudents);
 
 
 /* =========================
